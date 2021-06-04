@@ -77,7 +77,7 @@ namespace RMAP_tolmach
 
             // разбиваем исходную строку на массив подстрок по два символа
             string[] strArray = new string[byteNumber];
-            for(int i = byteNumber - 1; i >= 0; i--)
+            for(int i = 0; i < byteNumber; i++)
             {
                 // копируем два последних символа исходной строки
                 strArray[i] = newStr.Substring(newStr.Length - 2, 2);
@@ -167,7 +167,7 @@ namespace RMAP_tolmach
             }
 
             string text = "";
-            for (int i = 0; i < length; i++)
+            for (int i = length - 1; i >= 0; i--)
             {
                 text += divider + value[i].ToString("X2");
             }
@@ -180,12 +180,8 @@ namespace RMAP_tolmach
 
         public int ToInt()
         {
-            return BitConverter.ToInt32(value);
+            return 0;
         }
 
-        public string temp()
-        {
-            return value[2].ToString() + " " + value[1].ToString() + " " + value[0].ToString();
-        }
     }
 }
