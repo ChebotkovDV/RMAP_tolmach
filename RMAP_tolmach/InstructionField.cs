@@ -12,9 +12,9 @@ namespace RMAP_tolmach
 
         public InstructionField()
         {
-            fieldName = "Instruction";
-            length = 1;
-            this.value = new byte[] { 0 };
+            Name = "Instruction";
+            Length = 1;
+            this.bytes = new byte[] { 0 };
 
             PacketType = new PacketType();
             CommandType = new CommandField();
@@ -22,9 +22,9 @@ namespace RMAP_tolmach
         }
         public InstructionField(byte value)
         {
-            fieldName = "Instruction";
-            length = 1;
-            this.value = new byte[] { value};
+            Name = "Instruction";
+            Length = 1;
+            this.bytes = new byte[] { value};
 
             PacketType = new PacketType(value);
             CommandType = new CommandField(value);
@@ -42,7 +42,7 @@ namespace RMAP_tolmach
         public override void Set(string newValue)
         {
             base.Set(newValue);
-            if (base.fail)
+            if (base.Fail)
             {
                 PacketType = new PacketType(0xff);
                 CommandType = new CommandField(0);
@@ -50,9 +50,9 @@ namespace RMAP_tolmach
             }
             else
             {
-                PacketType = new PacketType(this.value[0]);
-                CommandType = new CommandField(this.value[0]);
-                AddressLength = new AddressLength(this.value[0]);
+                PacketType = new PacketType(this.bytes[0]);
+                CommandType = new CommandField(this.bytes[0]);
+                AddressLength = new AddressLength(this.bytes[0]);
             }
         }
         // приводит value в соответствие с PacketType, CommandType, AddressLength
@@ -67,7 +67,7 @@ namespace RMAP_tolmach
             newValue[2] = CommandType.Bits[0];
             newValue[1] = AddressLength.Bits[1];
             newValue[0] = AddressLength.Bits[0];
-            newValue.CopyTo(base.value, 0);
+            newValue.CopyTo(base.bytes, 0);
         }
 
     }

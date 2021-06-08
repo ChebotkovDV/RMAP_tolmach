@@ -6,30 +6,36 @@ namespace RMAP_tolmach
 {
     class Field
     {
-        protected byte[] value;
-        protected int length;
-        protected bool fail = false;
-        protected string log = "";
-        protected string fieldName = "newField";
+        protected byte[] bytes;
+        public int Length { get; protected set; }
+        public bool Fail { get; protected set; }
+        public string Log { get; protected set; }
+        public string Name { get; protected set; }
 
         public Field()
         {
-            fieldName = "empty";
-            length = 0;
+            Name = "empty";
+            Length = 0;
         }
         public Field(string name, int byteNumber)
         {
-            length = byteNumber;
-            value = new byte[length];
-            fieldName = name;
+            Length = byteNumber;
+            bytes = new byte[Length];
+            Name = name;
         }
 
         public Field(string name, int byteNumber, string inputValue)
         {
-            length = byteNumber;
-            fieldName = name;
-            value = new byte[length];
+            Length = byteNumber;
+            Name = name;
+            bytes = new byte[Length];
             Set(inputValue);
+        }
+
+        public void Set (byte newValue)
+        {
+            Length = 1;
+            bytes = new byte[1] { newValue };
         }
 
         public virtual void Set (string inputValue)
@@ -38,26 +44,26 @@ namespace RMAP_tolmach
             {
                 byte[] newValue = Parse(inputValue);
 
-                if (length < newValue.Length)
+                if (Length < newValue.Length)
                 {
-                    fail = true;
-                    log += "    данные не помещаются в поле \r\n";
+                    Fail = true;
+                    Log += "    данные не помещаются в поле \r\n";
                     return;
                 }
 
                 // заполняем массив value с конца. Первые символы остаются нулями.
-                int numberOfNulls = length - newValue.Length;
+                int numberOfNulls = Length - newValue.Length;
                 for (int i = newValue.Length - 1; i >= 0; i--)
                 {
-                    value[i + numberOfNulls] = newValue[i];
+                    bytes[i + numberOfNulls] = newValue[i];
                 }
-                fail = false;
-                log = "";
+                Fail = false;
+                Log = "";
             }
             catch
             {
-                fail = true;
-                log += "    введена не корректная строка \r\n";
+                Fail = true;
+                Log += "    введена не корректная строка \r\n";
             }
 
         }
@@ -96,62 +102,37 @@ namespace RMAP_tolmach
                 }
                 catch (FormatException)
                 {
-                    log += "    значение <" + strArray[i] + "> имеет не корректный формат \r\n";
-                    fail = true;
+                    Log += "    значение <" + strArray[i] + "> имеет не корректный формат \r\n";
+                    Fail = true;
                 }
                 catch (OverflowException)
                 {
-                    log += "    значение <" + strArray[i] + "> выходит за пределы 0..255 \r\n";
-                    fail = true;
+                    Log += "    значение <" + strArray[i] + "> выходит за пределы 0..255 \r\n";
+                    Fail = true;
                 }
                 catch (ArgumentException)
                 {
-                    log += "    значение <" + strArray[i] + "> не является 16-разрядным числом \r\n";
-                    fail = true;
+                    Log += "    значение <" + strArray[i] + "> не является 16-разрядным числом \r\n";
+                    Fail = true;
                 }
             }
             return byteArray;
         }
 
-        public int Length
-        {
-            get
-            {
-                return length;
-            }
-        }
 
-        public bool Fail
-        {
-            get
-            {
-                return fail;
-            }
-        }
 
-        public string Name
-        {
-            get
-            {
-                return fieldName;
-            }
-            set
-            {
-                fieldName = value;
-            }
-        }
 
         public string Status
         {
             get
             {
-                if (fail)
+                if (Fail)
                 {
-                    return "поле <" + fieldName + "> : \r\n" + log;
+                    return "поле <" + Name + "> : \r\n" + Log;
                 }
                 else
                 {
-                    return "поле <" + fieldName + ">    : ok \r\n";
+                    return "поле <" + Name + ">    : ok \r\n";
                 }
             }
         }
@@ -161,26 +142,35 @@ namespace RMAP_tolmach
         }
         public string ToString(string divider)
         {
-            if (fail)
+            if (Fail)
             {
                 return " FAIL ";
             }
 
             string text = "";
-            for (int i = length - 1; i >= 0; i--)
+            for (int i = Length - 1; i >= 0; i--)
             {
-                text += divider + value[i].ToString("X2");
+                text += divider + bytes[i].ToString("X2");
             }
             return text;
         }
         public byte[] ToBytes()
         {
-            return value;
+            return bytes;
         }
-
-        public int ToInt()
+        public int ToInt32()
         {
-            return 0;
+            byte[] extendedArray = new byte[4] { 0, 0, 0, 0 };
+            for (int i = 0; (i < 4) && (i < bytes.Length); i++)
+                extendedArray[i] = bytes[i];
+            return BitConverter.ToInt32(extendedArray,0);
+        }
+        public byte Byte0
+        {
+            get
+            {
+                return bytes[0];
+            }
         }
 
     }

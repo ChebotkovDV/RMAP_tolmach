@@ -30,12 +30,19 @@ namespace RMAP_tolmach
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabControl_selectCommand = new System.Windows.Forms.TabControl();
+            this.tabPage_write = new System.Windows.Forms.TabPage();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.textBox_packet = new System.Windows.Forms.TextBox();
+            this.button_parsePacket = new System.Windows.Forms.Button();
+            this.groupBox_endOfPacket = new System.Windows.Forms.GroupBox();
+            this.radioButton_Eep = new System.Windows.Forms.RadioButton();
+            this.radioButton_Eop = new System.Windows.Forms.RadioButton();
             this.textBox_DataLength = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
-            this.checkBox_EEP = new System.Windows.Forms.CheckBox();
             this.button_daraCRC_calc = new System.Windows.Forms.Button();
             this.textBox_dataCRC = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
@@ -82,19 +89,22 @@ namespace RMAP_tolmach
             this.textBox_TargetSpWAddresses = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox_TargetLogicalAddresses = new System.Windows.Forms.TextBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage_reply = new System.Windows.Forms.TabPage();
             this.textBox_Console = new System.Windows.Forms.TextBox();
             this.consoleContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.label13 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
+            this.copyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            this.tabControl_selectCommand.SuspendLayout();
+            this.tabPage_write.SuspendLayout();
+            this.groupBox_endOfPacket.SuspendLayout();
             this.groupBox_replyLength.SuspendLayout();
             this.groupBox_commandCodes.SuspendLayout();
             this.groupBox_packetType.SuspendLayout();
@@ -113,81 +123,156 @@ namespace RMAP_tolmach
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.AutoScroll = true;
-            this.splitContainer1.Panel1.Controls.Add(this.tabControl1);
+            this.splitContainer1.Panel1.Controls.Add(this.tabControl_selectCommand);
             this.splitContainer1.Panel1MinSize = 300;
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.textBox_Console);
             this.splitContainer1.Panel2MinSize = 100;
-            this.splitContainer1.Size = new System.Drawing.Size(819, 577);
-            this.splitContainer1.SplitterDistance = 455;
+            this.splitContainer1.Size = new System.Drawing.Size(819, 652);
+            this.splitContainer1.SplitterDistance = 514;
             this.splitContainer1.TabIndex = 7;
             // 
-            // tabControl1
+            // tabControl_selectCommand
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.tabControl_selectCommand.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(3, 3);
-            this.tabControl1.MinimumSize = new System.Drawing.Size(750, 100);
-            this.tabControl1.Multiline = true;
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(813, 449);
-            this.tabControl1.TabIndex = 6;
+            this.tabControl_selectCommand.Controls.Add(this.tabPage_write);
+            this.tabControl_selectCommand.Controls.Add(this.tabPage_reply);
+            this.tabControl_selectCommand.Location = new System.Drawing.Point(3, 3);
+            this.tabControl_selectCommand.MinimumSize = new System.Drawing.Size(750, 100);
+            this.tabControl_selectCommand.Multiline = true;
+            this.tabControl_selectCommand.Name = "tabControl_selectCommand";
+            this.tabControl_selectCommand.SelectedIndex = 0;
+            this.tabControl_selectCommand.Size = new System.Drawing.Size(813, 508);
+            this.tabControl_selectCommand.TabIndex = 6;
             // 
-            // tabPage1
+            // tabPage_write
             // 
-            this.tabPage1.AutoScroll = true;
-            this.tabPage1.Controls.Add(this.textBox_DataLength);
-            this.tabPage1.Controls.Add(this.label20);
-            this.tabPage1.Controls.Add(this.checkBox_EEP);
-            this.tabPage1.Controls.Add(this.button_daraCRC_calc);
-            this.tabPage1.Controls.Add(this.textBox_dataCRC);
-            this.tabPage1.Controls.Add(this.label19);
-            this.tabPage1.Controls.Add(this.label17);
-            this.tabPage1.Controls.Add(this.textBox_Data);
-            this.tabPage1.Controls.Add(this.button_headerCRC_calc);
-            this.tabPage1.Controls.Add(this.textBox_headerCRC);
-            this.tabPage1.Controls.Add(this.label16);
-            this.tabPage1.Controls.Add(this.textBox_address);
-            this.tabPage1.Controls.Add(this.label15);
-            this.tabPage1.Controls.Add(this.textBox_extendedAddress);
-            this.tabPage1.Controls.Add(this.label14);
-            this.tabPage1.Controls.Add(this.textBox_TransactionIdentifier);
-            this.tabPage1.Controls.Add(this.label12);
-            this.tabPage1.Controls.Add(this.textBox_InitiatorLogicalAddress);
-            this.tabPage1.Controls.Add(this.label11);
-            this.tabPage1.Controls.Add(this.label10);
-            this.tabPage1.Controls.Add(this.textBox_ReplayAddresses);
-            this.tabPage1.Controls.Add(this.textBox_Key);
-            this.tabPage1.Controls.Add(this.label9);
-            this.tabPage1.Controls.Add(this.groupBox_replyLength);
-            this.tabPage1.Controls.Add(this.groupBox_commandCodes);
-            this.tabPage1.Controls.Add(this.groupBox_packetType);
-            this.tabPage1.Controls.Add(this.textBox_Instruction);
-            this.tabPage1.Controls.Add(this.label4);
-            this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.textBox_ProtocolIdentifier);
-            this.tabPage1.Controls.Add(this.Button_CreatePacket);
-            this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.textBox_TargetSpWAddresses);
-            this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Controls.Add(this.textBox_TargetLogicalAddresses);
-            this.tabPage1.Location = new System.Drawing.Point(4, 24);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(805, 421);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Сгенерить пакет";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabPage_write.AutoScroll = true;
+            this.tabPage_write.Controls.Add(this.label22);
+            this.tabPage_write.Controls.Add(this.label21);
+            this.tabPage_write.Controls.Add(this.textBox_packet);
+            this.tabPage_write.Controls.Add(this.button_parsePacket);
+            this.tabPage_write.Controls.Add(this.groupBox_endOfPacket);
+            this.tabPage_write.Controls.Add(this.textBox_DataLength);
+            this.tabPage_write.Controls.Add(this.label20);
+            this.tabPage_write.Controls.Add(this.button_daraCRC_calc);
+            this.tabPage_write.Controls.Add(this.textBox_dataCRC);
+            this.tabPage_write.Controls.Add(this.label19);
+            this.tabPage_write.Controls.Add(this.label17);
+            this.tabPage_write.Controls.Add(this.textBox_Data);
+            this.tabPage_write.Controls.Add(this.button_headerCRC_calc);
+            this.tabPage_write.Controls.Add(this.textBox_headerCRC);
+            this.tabPage_write.Controls.Add(this.label16);
+            this.tabPage_write.Controls.Add(this.textBox_address);
+            this.tabPage_write.Controls.Add(this.label15);
+            this.tabPage_write.Controls.Add(this.textBox_extendedAddress);
+            this.tabPage_write.Controls.Add(this.label14);
+            this.tabPage_write.Controls.Add(this.textBox_TransactionIdentifier);
+            this.tabPage_write.Controls.Add(this.label12);
+            this.tabPage_write.Controls.Add(this.textBox_InitiatorLogicalAddress);
+            this.tabPage_write.Controls.Add(this.label11);
+            this.tabPage_write.Controls.Add(this.label10);
+            this.tabPage_write.Controls.Add(this.textBox_ReplayAddresses);
+            this.tabPage_write.Controls.Add(this.textBox_Key);
+            this.tabPage_write.Controls.Add(this.label9);
+            this.tabPage_write.Controls.Add(this.groupBox_replyLength);
+            this.tabPage_write.Controls.Add(this.groupBox_commandCodes);
+            this.tabPage_write.Controls.Add(this.groupBox_packetType);
+            this.tabPage_write.Controls.Add(this.textBox_Instruction);
+            this.tabPage_write.Controls.Add(this.label4);
+            this.tabPage_write.Controls.Add(this.label3);
+            this.tabPage_write.Controls.Add(this.textBox_ProtocolIdentifier);
+            this.tabPage_write.Controls.Add(this.Button_CreatePacket);
+            this.tabPage_write.Controls.Add(this.label2);
+            this.tabPage_write.Controls.Add(this.textBox_TargetSpWAddresses);
+            this.tabPage_write.Controls.Add(this.label1);
+            this.tabPage_write.Controls.Add(this.textBox_TargetLogicalAddresses);
+            this.tabPage_write.Location = new System.Drawing.Point(4, 24);
+            this.tabPage_write.Name = "tabPage_write";
+            this.tabPage_write.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_write.Size = new System.Drawing.Size(805, 480);
+            this.tabPage_write.TabIndex = 0;
+            this.tabPage_write.Text = "Запрос";
+            this.tabPage_write.UseVisualStyleBackColor = true;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(546, 59);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(44, 15);
+            this.label22.TabIndex = 42;
+            this.label22.Text = "label22";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(83, 16);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(90, 15);
+            this.label21.TabIndex = 41;
+            this.label21.Text = "Текущий пакет";
+            // 
+            // textBox_packet
+            // 
+            this.textBox_packet.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_packet.Location = new System.Drawing.Point(179, 13);
+            this.textBox_packet.Name = "textBox_packet";
+            this.textBox_packet.Size = new System.Drawing.Size(589, 23);
+            this.textBox_packet.TabIndex = 40;
+            // 
+            // button_parsePacket
+            // 
+            this.button_parsePacket.Image = ((System.Drawing.Image)(resources.GetObject("button_parsePacket.Image")));
+            this.button_parsePacket.Location = new System.Drawing.Point(435, 54);
+            this.button_parsePacket.Name = "button_parsePacket";
+            this.button_parsePacket.Size = new System.Drawing.Size(109, 24);
+            this.button_parsePacket.TabIndex = 39;
+            this.button_parsePacket.UseVisualStyleBackColor = true;
+            this.button_parsePacket.Click += new System.EventHandler(this.button_parsePacket_Click);
+            // 
+            // groupBox_endOfPacket
+            // 
+            this.groupBox_endOfPacket.Controls.Add(this.radioButton_Eep);
+            this.groupBox_endOfPacket.Controls.Add(this.radioButton_Eop);
+            this.groupBox_endOfPacket.Location = new System.Drawing.Point(442, 417);
+            this.groupBox_endOfPacket.Name = "groupBox_endOfPacket";
+            this.groupBox_endOfPacket.Size = new System.Drawing.Size(145, 52);
+            this.groupBox_endOfPacket.TabIndex = 38;
+            this.groupBox_endOfPacket.TabStop = false;
+            this.groupBox_endOfPacket.Text = "Символ конца пакета";
+            // 
+            // radioButton_Eep
+            // 
+            this.radioButton_Eep.AutoSize = true;
+            this.radioButton_Eep.Location = new System.Drawing.Point(77, 27);
+            this.radioButton_Eep.Name = "radioButton_Eep";
+            this.radioButton_Eep.Size = new System.Drawing.Size(44, 19);
+            this.radioButton_Eep.TabIndex = 1;
+            this.radioButton_Eep.TabStop = true;
+            this.radioButton_Eep.Text = "EEP";
+            this.radioButton_Eep.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_Eop
+            // 
+            this.radioButton_Eop.AutoSize = true;
+            this.radioButton_Eop.Cursor = System.Windows.Forms.Cursors.No;
+            this.radioButton_Eop.Location = new System.Drawing.Point(17, 27);
+            this.radioButton_Eop.Name = "radioButton_Eop";
+            this.radioButton_Eop.Size = new System.Drawing.Size(47, 19);
+            this.radioButton_Eop.TabIndex = 0;
+            this.radioButton_Eop.TabStop = true;
+            this.radioButton_Eop.Text = "EOP";
+            this.radioButton_Eop.UseVisualStyleBackColor = true;
             // 
             // textBox_DataLength
             // 
-            this.textBox_DataLength.Location = new System.Drawing.Point(181, 281);
+            this.textBox_DataLength.Location = new System.Drawing.Point(179, 359);
             this.textBox_DataLength.Name = "textBox_DataLength";
             this.textBox_DataLength.Size = new System.Drawing.Size(73, 23);
             this.textBox_DataLength.TabIndex = 37;
@@ -196,34 +281,25 @@ namespace RMAP_tolmach
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(54, 284);
+            this.label20.Location = new System.Drawing.Point(52, 362);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(122, 15);
             this.label20.TabIndex = 36;
             this.label20.Text = "Data Length (3 байта)";
             // 
-            // checkBox_EEP
-            // 
-            this.checkBox_EEP.AutoSize = true;
-            this.checkBox_EEP.Location = new System.Drawing.Point(464, 341);
-            this.checkBox_EEP.Name = "checkBox_EEP";
-            this.checkBox_EEP.Size = new System.Drawing.Size(182, 19);
-            this.checkBox_EEP.TabIndex = 35;
-            this.checkBox_EEP.Text = "добавить EEP в конец пакета";
-            this.checkBox_EEP.UseVisualStyleBackColor = true;
-            // 
             // button_daraCRC_calc
             // 
-            this.button_daraCRC_calc.Location = new System.Drawing.Point(260, 368);
+            this.button_daraCRC_calc.Location = new System.Drawing.Point(258, 446);
             this.button_daraCRC_calc.Name = "button_daraCRC_calc";
             this.button_daraCRC_calc.Size = new System.Drawing.Size(86, 23);
             this.button_daraCRC_calc.TabIndex = 34;
             this.button_daraCRC_calc.Text = "Рассчитать";
             this.button_daraCRC_calc.UseVisualStyleBackColor = true;
+            this.button_daraCRC_calc.Click += new System.EventHandler(this.button_daraCRC_calc_Click);
             // 
             // textBox_dataCRC
             // 
-            this.textBox_dataCRC.Location = new System.Drawing.Point(181, 368);
+            this.textBox_dataCRC.Location = new System.Drawing.Point(179, 446);
             this.textBox_dataCRC.Name = "textBox_dataCRC";
             this.textBox_dataCRC.Size = new System.Drawing.Size(73, 23);
             this.textBox_dataCRC.TabIndex = 33;
@@ -232,7 +308,7 @@ namespace RMAP_tolmach
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(118, 371);
+            this.label19.Location = new System.Drawing.Point(116, 449);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(57, 15);
             this.label19.TabIndex = 32;
@@ -241,7 +317,7 @@ namespace RMAP_tolmach
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(77, 313);
+            this.label17.Location = new System.Drawing.Point(75, 391);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(99, 15);
             this.label17.TabIndex = 31;
@@ -251,7 +327,7 @@ namespace RMAP_tolmach
             // 
             this.textBox_Data.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_Data.Location = new System.Drawing.Point(181, 310);
+            this.textBox_Data.Location = new System.Drawing.Point(179, 388);
             this.textBox_Data.Name = "textBox_Data";
             this.textBox_Data.Size = new System.Drawing.Size(589, 23);
             this.textBox_Data.TabIndex = 30;
@@ -259,16 +335,17 @@ namespace RMAP_tolmach
             // 
             // button_headerCRC_calc
             // 
-            this.button_headerCRC_calc.Location = new System.Drawing.Point(260, 339);
+            this.button_headerCRC_calc.Location = new System.Drawing.Point(258, 417);
             this.button_headerCRC_calc.Name = "button_headerCRC_calc";
             this.button_headerCRC_calc.Size = new System.Drawing.Size(86, 23);
             this.button_headerCRC_calc.TabIndex = 29;
             this.button_headerCRC_calc.Text = "Рассчитать";
             this.button_headerCRC_calc.UseVisualStyleBackColor = true;
+            this.button_headerCRC_calc.Click += new System.EventHandler(this.button_headerCRC_calc_Click);
             // 
             // textBox_headerCRC
             // 
-            this.textBox_headerCRC.Location = new System.Drawing.Point(181, 339);
+            this.textBox_headerCRC.Location = new System.Drawing.Point(179, 417);
             this.textBox_headerCRC.Name = "textBox_headerCRC";
             this.textBox_headerCRC.Size = new System.Drawing.Size(73, 23);
             this.textBox_headerCRC.TabIndex = 28;
@@ -277,7 +354,7 @@ namespace RMAP_tolmach
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(104, 342);
+            this.label16.Location = new System.Drawing.Point(102, 420);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(71, 15);
             this.label16.TabIndex = 27;
@@ -285,7 +362,7 @@ namespace RMAP_tolmach
             // 
             // textBox_address
             // 
-            this.textBox_address.Location = new System.Drawing.Point(516, 252);
+            this.textBox_address.Location = new System.Drawing.Point(514, 330);
             this.textBox_address.Name = "textBox_address";
             this.textBox_address.Size = new System.Drawing.Size(73, 23);
             this.textBox_address.TabIndex = 26;
@@ -294,7 +371,7 @@ namespace RMAP_tolmach
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(410, 255);
+            this.label15.Location = new System.Drawing.Point(408, 333);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(100, 15);
             this.label15.TabIndex = 25;
@@ -302,7 +379,7 @@ namespace RMAP_tolmach
             // 
             // textBox_extendedAddress
             // 
-            this.textBox_extendedAddress.Location = new System.Drawing.Point(515, 223);
+            this.textBox_extendedAddress.Location = new System.Drawing.Point(513, 301);
             this.textBox_extendedAddress.Name = "textBox_extendedAddress";
             this.textBox_extendedAddress.Size = new System.Drawing.Size(73, 23);
             this.textBox_extendedAddress.TabIndex = 24;
@@ -311,7 +388,7 @@ namespace RMAP_tolmach
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(409, 226);
+            this.label14.Location = new System.Drawing.Point(407, 304);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(100, 15);
             this.label14.TabIndex = 23;
@@ -319,7 +396,7 @@ namespace RMAP_tolmach
             // 
             // textBox_TransactionIdentifier
             // 
-            this.textBox_TransactionIdentifier.Location = new System.Drawing.Point(181, 252);
+            this.textBox_TransactionIdentifier.Location = new System.Drawing.Point(179, 330);
             this.textBox_TransactionIdentifier.Name = "textBox_TransactionIdentifier";
             this.textBox_TransactionIdentifier.Size = new System.Drawing.Size(73, 23);
             this.textBox_TransactionIdentifier.TabIndex = 22;
@@ -328,7 +405,7 @@ namespace RMAP_tolmach
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(5, 255);
+            this.label12.Location = new System.Drawing.Point(3, 333);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(170, 15);
             this.label12.TabIndex = 21;
@@ -336,7 +413,7 @@ namespace RMAP_tolmach
             // 
             // textBox_InitiatorLogicalAddress
             // 
-            this.textBox_InitiatorLogicalAddress.Location = new System.Drawing.Point(181, 223);
+            this.textBox_InitiatorLogicalAddress.Location = new System.Drawing.Point(179, 301);
             this.textBox_InitiatorLogicalAddress.Name = "textBox_InitiatorLogicalAddress";
             this.textBox_InitiatorLogicalAddress.Size = new System.Drawing.Size(73, 23);
             this.textBox_InitiatorLogicalAddress.TabIndex = 20;
@@ -345,7 +422,7 @@ namespace RMAP_tolmach
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(41, 226);
+            this.label11.Location = new System.Drawing.Point(39, 304);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(134, 15);
             this.label11.TabIndex = 19;
@@ -354,7 +431,7 @@ namespace RMAP_tolmach
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(77, 197);
+            this.label10.Location = new System.Drawing.Point(75, 275);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(98, 15);
             this.label10.TabIndex = 18;
@@ -364,7 +441,7 @@ namespace RMAP_tolmach
             // 
             this.textBox_ReplayAddresses.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_ReplayAddresses.Location = new System.Drawing.Point(181, 194);
+            this.textBox_ReplayAddresses.Location = new System.Drawing.Point(179, 272);
             this.textBox_ReplayAddresses.Name = "textBox_ReplayAddresses";
             this.textBox_ReplayAddresses.Size = new System.Drawing.Size(589, 23);
             this.textBox_ReplayAddresses.TabIndex = 17;
@@ -372,7 +449,7 @@ namespace RMAP_tolmach
             // 
             // textBox_Key
             // 
-            this.textBox_Key.Location = new System.Drawing.Point(181, 153);
+            this.textBox_Key.Location = new System.Drawing.Point(179, 231);
             this.textBox_Key.Name = "textBox_Key";
             this.textBox_Key.Size = new System.Drawing.Size(73, 23);
             this.textBox_Key.TabIndex = 16;
@@ -381,7 +458,7 @@ namespace RMAP_tolmach
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(149, 156);
+            this.label9.Location = new System.Drawing.Point(147, 234);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(26, 15);
             this.label9.TabIndex = 15;
@@ -393,7 +470,7 @@ namespace RMAP_tolmach
             this.groupBox_replyLength.Controls.Add(this.radioButton_replyAddrLength_8);
             this.groupBox_replyLength.Controls.Add(this.radioButton_replyAddrLength_4);
             this.groupBox_replyLength.Controls.Add(this.radioButton_replyAddrLength_0);
-            this.groupBox_replyLength.Location = new System.Drawing.Point(629, 88);
+            this.groupBox_replyLength.Location = new System.Drawing.Point(627, 166);
             this.groupBox_replyLength.Name = "groupBox_replyLength";
             this.groupBox_replyLength.Size = new System.Drawing.Size(141, 88);
             this.groupBox_replyLength.TabIndex = 14;
@@ -456,7 +533,7 @@ namespace RMAP_tolmach
             this.groupBox_commandCodes.Controls.Add(this.label5);
             this.groupBox_commandCodes.Controls.Add(this.label6);
             this.groupBox_commandCodes.Controls.Add(this.label7);
-            this.groupBox_commandCodes.Location = new System.Drawing.Point(373, 88);
+            this.groupBox_commandCodes.Location = new System.Drawing.Point(371, 166);
             this.groupBox_commandCodes.Name = "groupBox_commandCodes";
             this.groupBox_commandCodes.Size = new System.Drawing.Size(250, 88);
             this.groupBox_commandCodes.TabIndex = 13;
@@ -545,7 +622,7 @@ namespace RMAP_tolmach
             // 
             this.groupBox_packetType.Controls.Add(this.radioButton_packetType_reply);
             this.groupBox_packetType.Controls.Add(this.radioButton_packetType_command);
-            this.groupBox_packetType.Location = new System.Drawing.Point(283, 88);
+            this.groupBox_packetType.Location = new System.Drawing.Point(281, 166);
             this.groupBox_packetType.Name = "groupBox_packetType";
             this.groupBox_packetType.Size = new System.Drawing.Size(84, 88);
             this.groupBox_packetType.TabIndex = 12;
@@ -578,7 +655,7 @@ namespace RMAP_tolmach
             // 
             // textBox_Instruction
             // 
-            this.textBox_Instruction.Location = new System.Drawing.Point(181, 124);
+            this.textBox_Instruction.Location = new System.Drawing.Point(179, 202);
             this.textBox_Instruction.Name = "textBox_Instruction";
             this.textBox_Instruction.Size = new System.Drawing.Size(73, 23);
             this.textBox_Instruction.TabIndex = 11;
@@ -588,7 +665,7 @@ namespace RMAP_tolmach
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(111, 127);
+            this.label4.Location = new System.Drawing.Point(109, 205);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(64, 15);
             this.label4.TabIndex = 10;
@@ -597,7 +674,7 @@ namespace RMAP_tolmach
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(73, 98);
+            this.label3.Location = new System.Drawing.Point(71, 176);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(102, 15);
             this.label3.TabIndex = 9;
@@ -605,7 +682,7 @@ namespace RMAP_tolmach
             // 
             // textBox_ProtocolIdentifier
             // 
-            this.textBox_ProtocolIdentifier.Location = new System.Drawing.Point(181, 95);
+            this.textBox_ProtocolIdentifier.Location = new System.Drawing.Point(179, 173);
             this.textBox_ProtocolIdentifier.Name = "textBox_ProtocolIdentifier";
             this.textBox_ProtocolIdentifier.Size = new System.Drawing.Size(73, 23);
             this.textBox_ProtocolIdentifier.TabIndex = 8;
@@ -613,28 +690,28 @@ namespace RMAP_tolmach
             // 
             // Button_CreatePacket
             // 
-            this.Button_CreatePacket.Location = new System.Drawing.Point(464, 366);
+            this.Button_CreatePacket.Image = ((System.Drawing.Image)(resources.GetObject("Button_CreatePacket.Image")));
+            this.Button_CreatePacket.Location = new System.Drawing.Point(179, 54);
             this.Button_CreatePacket.Name = "Button_CreatePacket";
-            this.Button_CreatePacket.Size = new System.Drawing.Size(212, 43);
+            this.Button_CreatePacket.Size = new System.Drawing.Size(109, 24);
             this.Button_CreatePacket.TabIndex = 5;
-            this.Button_CreatePacket.Text = "Создать новый пакет";
             this.Button_CreatePacket.UseVisualStyleBackColor = true;
             this.Button_CreatePacket.Click += new System.EventHandler(this.button_packetGenerate_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(37, 50);
+            this.label2.Location = new System.Drawing.Point(46, 128);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(138, 15);
+            this.label2.Size = new System.Drawing.Size(127, 15);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Target Logical Addresses";
+            this.label2.Text = "Target Logical Address";
             // 
             // textBox_TargetSpWAddresses
             // 
             this.textBox_TargetSpWAddresses.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_TargetSpWAddresses.Location = new System.Drawing.Point(181, 18);
+            this.textBox_TargetSpWAddresses.Location = new System.Drawing.Point(179, 96);
             this.textBox_TargetSpWAddresses.Name = "textBox_TargetSpWAddresses";
             this.textBox_TargetSpWAddresses.Size = new System.Drawing.Size(589, 23);
             this.textBox_TargetSpWAddresses.TabIndex = 0;
@@ -643,7 +720,7 @@ namespace RMAP_tolmach
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(51, 21);
+            this.label1.Location = new System.Drawing.Point(49, 99);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(124, 15);
             this.label1.TabIndex = 3;
@@ -651,36 +728,35 @@ namespace RMAP_tolmach
             // 
             // textBox_TargetLogicalAddresses
             // 
-            this.textBox_TargetLogicalAddresses.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_TargetLogicalAddresses.Location = new System.Drawing.Point(181, 47);
+            this.textBox_TargetLogicalAddresses.Location = new System.Drawing.Point(179, 125);
             this.textBox_TargetLogicalAddresses.Name = "textBox_TargetLogicalAddresses";
-            this.textBox_TargetLogicalAddresses.Size = new System.Drawing.Size(589, 23);
+            this.textBox_TargetLogicalAddresses.Size = new System.Drawing.Size(73, 23);
             this.textBox_TargetLogicalAddresses.TabIndex = 2;
             this.textBox_TargetLogicalAddresses.Text = "0xFE";
             // 
-            // tabPage2
+            // tabPage_reply
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 24);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(805, 421);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Распарсить ответ";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabPage_reply.Location = new System.Drawing.Point(4, 24);
+            this.tabPage_reply.Name = "tabPage_reply";
+            this.tabPage_reply.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_reply.Size = new System.Drawing.Size(805, 480);
+            this.tabPage_reply.TabIndex = 1;
+            this.tabPage_reply.Text = "Ответ";
+            this.tabPage_reply.UseVisualStyleBackColor = true;
             // 
             // textBox_Console
             // 
             this.textBox_Console.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_Console.ContextMenuStrip = this.consoleContextMenu;
             this.textBox_Console.Location = new System.Drawing.Point(7, 7);
             this.textBox_Console.MinimumSize = new System.Drawing.Size(100, 100);
             this.textBox_Console.Multiline = true;
             this.textBox_Console.Name = "textBox_Console";
             this.textBox_Console.ReadOnly = true;
             this.textBox_Console.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox_Console.Size = new System.Drawing.Size(805, 106);
+            this.textBox_Console.Size = new System.Drawing.Size(805, 122);
             this.textBox_Console.TabIndex = 7;
             // 
             // consoleContextMenu
@@ -723,11 +799,23 @@ namespace RMAP_tolmach
             this.label18.TabIndex = 31;
             this.label18.Text = "Replay Addresses";
             // 
+            // copyMenuItem
+            // 
+            this.copyMenuItem.Name = "copyMenuItem";
+            this.copyMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.copyMenuItem.Text = "Копировать";
+            // 
+            // clearMenuItem
+            // 
+            this.clearMenuItem.Name = "clearMenuItem";
+            this.clearMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.clearMenuItem.Text = "Очистить";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(834, 584);
+            this.ClientSize = new System.Drawing.Size(834, 659);
             this.Controls.Add(this.splitContainer1);
             this.MinimumSize = new System.Drawing.Size(850, 600);
             this.Name = "Form1";
@@ -737,9 +825,11 @@ namespace RMAP_tolmach
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
+            this.tabControl_selectCommand.ResumeLayout(false);
+            this.tabPage_write.ResumeLayout(false);
+            this.tabPage_write.PerformLayout();
+            this.groupBox_endOfPacket.ResumeLayout(false);
+            this.groupBox_endOfPacket.PerformLayout();
             this.groupBox_replyLength.ResumeLayout(false);
             this.groupBox_replyLength.PerformLayout();
             this.groupBox_commandCodes.ResumeLayout(false);
@@ -753,16 +843,15 @@ namespace RMAP_tolmach
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabControl tabControl_selectCommand;
+        private System.Windows.Forms.TabPage tabPage_write;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox_TargetSpWAddresses;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox_TargetLogicalAddresses;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage tabPage_reply;
         private System.Windows.Forms.TextBox textBox_Console;
         private System.Windows.Forms.ContextMenuStrip consoleContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.Button Button_CreatePacket;
         private System.Windows.Forms.TextBox textBox_ProtocolIdentifier;
         private System.Windows.Forms.Label label3;
@@ -809,9 +898,17 @@ namespace RMAP_tolmach
         private System.Windows.Forms.Button button_headerCRC_calc;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.CheckBox checkBox_EEP;
         private System.Windows.Forms.TextBox textBox_DataLength;
         private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.GroupBox groupBox_endOfPacket;
+        private System.Windows.Forms.RadioButton radioButton_Eep;
+        private System.Windows.Forms.RadioButton radioButton_Eop;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox textBox_packet;
+        private System.Windows.Forms.Button button_parsePacket;
+        private System.Windows.Forms.ToolStripMenuItem copyMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearMenuItem;
+        private System.Windows.Forms.Label label22;
     }
 }
 

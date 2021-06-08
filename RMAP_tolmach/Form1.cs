@@ -13,24 +13,16 @@ namespace RMAP_tolmach
     public partial class Form1 : Form
     {
         
-        private Form_test myFormTest;
-
-        private WriteCommand writeCommand;
+        private WritePacket writeCommand;
 
         public Form1()
         {
             InitializeComponent();
-            myFormTest = new Form_test();
 
-            // настройка контекстных меню
-            ToolStripMenuItem copyMenuItem = new ToolStripMenuItem("Копировать");
-            ToolStripMenuItem clearMenuItem = new ToolStripMenuItem("Очистить");
-            consoleContextMenu.Items.AddRange(new[] { copyMenuItem, clearMenuItem });
-            textBox_Console.ContextMenuStrip = consoleContextMenu;
-            copyMenuItem.Click += copyMenuItem_Click;
-            clearMenuItem.Click += clearMenuItem_Click;
+            this.consoleContextMenu.Items.AddRange(new[] { clearMenuItem, copyMenuItem });
 
-            writeCommand = new WriteCommand();
+
+            writeCommand = new WritePacket();
         }
 
 
@@ -47,6 +39,14 @@ namespace RMAP_tolmach
         }
         private void button_packetGenerate_Click(object sender, EventArgs e)
         {
+            UpdateAllFields();
+
+            textBox_packet.Text = writeCommand.GetRMAPPacket();
+            Report(writeCommand.Status + "\r\n");
+        }
+
+        private void UpdateAllFields()
+        {
             writeCommand.TargetSpWAddresses.Set(textBox_TargetSpWAddresses.Text);
             writeCommand.TargetLogicalAddresses.Set(textBox_TargetLogicalAddresses.Text);
             writeCommand.ProtocolIdentifier.Set(textBox_ProtocolIdentifier.Text);
@@ -61,16 +61,12 @@ namespace RMAP_tolmach
             writeCommand.HeaderCRC.Set(textBox_headerCRC.Text);
             writeCommand.Data.Set(textBox_Data.Text);
             writeCommand.DataCRC.Set(textBox_dataCRC.Text);
-            writeCommand.EEP = checkBox_EEP.Checked;
+            writeCommand.EEP = radioButton_Eep.Checked;
 
-            Report("\r\n\r\n\r\n-----   Новый пакет:   -----------------");
-            Report(writeCommand.Status);
-            Report(writeCommand.GetRMAPPacket());
-        }
-
-        private void button2_Click_1(object sender, EventArgs e)
-        {
-                        
+            if (writeCommand.Fail)
+            {
+                Report("одно или несколько полей заполнено не корректно");
+            }
         }
 
         private void Report(string rep)
@@ -78,8 +74,6 @@ namespace RMAP_tolmach
             textBox_Console.AppendText(rep + "\r\n");
 
         }
-
-
         // обновление элементов управления полем "Instruction":
         private void InstructionControlsUpdate(object sender, EventArgs e)
         {
@@ -139,6 +133,24 @@ namespace RMAP_tolmach
             textBox_Instruction.TextChanged -= new System.EventHandler(this.InstructionControlsUpdate);
             textBox_Instruction.Text = writeCommand.Instruction.ToString();
             textBox_Instruction.TextChanged += new System.EventHandler(this.InstructionControlsUpdate);
+        }
+
+        private void button_headerCRC_calc_Click(object sender, EventArgs e)
+        {
+            UpdateAllFields();
+            writeCommand.UpdateHeaderCrc();
+            textBox_headerCRC.Text = writeCommand.HeaderCRC.ToString(" 0x");
+        }
+        private void button_daraCRC_calc_Click(object sender, EventArgs e)
+        {
+            UpdateAllFields();
+            writeCommand.UpdateDataCrc();
+            textBox_dataCRC.Text = writeCommand.DataCRC.ToString(" 0x");
+        }
+
+        private void button_parsePacket_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

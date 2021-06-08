@@ -6,26 +6,28 @@ namespace RMAP_tolmach
 {
     class FieldsArray
     {
-        Field[] fields;
-        int length;
-        int width;
-        string name = "new";
-        string log = "";
-        bool fail = false;
+        public Field[] Fields { get; set; }
+        public int Length { private set; get; }
+        public int Width { private set; get; }
+        public string Name { private set; get; }
+        public string Log { private set; get; }
+        public bool Fail { private set; get; }
+        public bool Empty { private set; get; }
 
         public FieldsArray(string name, int width)
         {
-            this.width = width;
-            this.name = name;
+            this.Width = width;
+            this.Name = name;
+            this.Empty = true;
         }
 
         public Field this [int index]
         {
             get
             {
-                if (index >= 0 && index < length)
+                if (index >= 0 && index < Length)
                 {
-                    return fields[index];
+                    return Fields[index];
                 }
                 else
                 {
@@ -34,14 +36,14 @@ namespace RMAP_tolmach
             }
             set
             {
-                if (index >= 0 && index < length)
+                if (index >= 0 && index < Length)
                 {
-                    fields[index] = value;
+                    Fields[index] = value;
                 }
                 else
                 {
-                    fail = true;
-                    log += "    поле с индексом " + index.ToString() + " не существует \r\n";
+                    Fail = true;
+                    Log += "    поле с индексом " + index.ToString() + " не существует \r\n";
                 }
             }
         }
@@ -49,13 +51,13 @@ namespace RMAP_tolmach
         {
             get
             {
-                if (fail)
+                if (Fail)
                 {
-                    return log;
+                    return Log;
                 }
                 else
                 {
-                    return "Поля <" + name + ">    : ok \r\n";
+                    return "Поля <" + Name + ">    : ok \r\n";
                 }
             }
         }
@@ -63,67 +65,59 @@ namespace RMAP_tolmach
         public void Set(string str)
         {
             string[] strArray = str.Split(' ');
-            length = strArray.Length;
-            fields = new Field[length];
+            Length = strArray.Length;
+            Fields = new Field[Length];
 
-            for (int i = 0; i<length; i++)
+            for (int i = 0; i<Length; i++)
             {
-                string fieldName = name + "[" + i.ToString() + "]";
-                Field newField = new Field(fieldName, width, strArray[i]);
-                fields[i] = newField;
+                string fieldName = Name + "[" + i.ToString() + "]";
+                Fields[i] = new Field(fieldName, Width, strArray[Length - 1 - i]);
+                Empty = false;
 
-                if (newField.Fail)
+                if (Fields[i].Fail)
                 {
-                    fail = true;
-                    log += newField.Status + "\r\n";
+                    Fail = true;
+                    Log += Fields[i].Status + "\r\n";
                 }
             }
-        }
-        public int Length
-        {
-            get
+
+            if (str == "")
             {
-                return length;
-            }
-        }
-        public int Width
-        {
-            get
-            {
-                return width;
-            }
-        }
-        public bool Fail
-        {
-            get
-            {
-                return fail;
+                Fail = false;
+                Length = 0;
+                Log = "empty";
+                Empty = true;
+                Fields = null;
             }
         }
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-            }
-        }
         public override string ToString()
         {
             return ToString(" ");
         }
         public string ToString(string divider)
         {
-            string text = "";
-            for (int i = 0; i < length; i++)
+            if (Empty)
             {
-                text += "   " + fields[i].ToString(divider);
+                return "";
+            }
+
+            string text = "";
+            for (int i = 0; i < Length; i++)
+            {
+                text += " " + Fields[i].ToString(divider);
             }
             return text;
+        }
+
+        public byte[] ToBytes()
+        {
+            byte[] bytes = new byte[Length * Width];
+            for (int i = 0; i < Length; i++)
+            {
+                Fields[i].ToBytes().CopyTo(bytes, i * Width);
+            }
+            return bytes;
         }
     }
 }
