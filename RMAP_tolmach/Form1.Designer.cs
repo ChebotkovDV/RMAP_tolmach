@@ -34,7 +34,6 @@ namespace RMAP_tolmach
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControl_selectCommand = new System.Windows.Forms.TabControl();
             this.tabPage_write = new System.Windows.Forms.TabPage();
-            this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.textBox_packet = new System.Windows.Forms.TextBox();
             this.button_parsePacket = new System.Windows.Forms.Button();
@@ -152,7 +151,6 @@ namespace RMAP_tolmach
             // tabPage_write
             // 
             this.tabPage_write.AutoScroll = true;
-            this.tabPage_write.Controls.Add(this.label22);
             this.tabPage_write.Controls.Add(this.label21);
             this.tabPage_write.Controls.Add(this.textBox_packet);
             this.tabPage_write.Controls.Add(this.button_parsePacket);
@@ -198,15 +196,6 @@ namespace RMAP_tolmach
             this.tabPage_write.TabIndex = 0;
             this.tabPage_write.Text = "Запрос";
             this.tabPage_write.UseVisualStyleBackColor = true;
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(546, 59);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(44, 15);
-            this.label22.TabIndex = 42;
-            this.label22.Text = "label22";
             // 
             // label21
             // 
@@ -276,7 +265,7 @@ namespace RMAP_tolmach
             this.textBox_DataLength.Name = "textBox_DataLength";
             this.textBox_DataLength.Size = new System.Drawing.Size(73, 23);
             this.textBox_DataLength.TabIndex = 37;
-            this.textBox_DataLength.Text = "0x000000";
+            this.textBox_DataLength.Text = "0x000040";
             // 
             // label20
             // 
@@ -331,7 +320,7 @@ namespace RMAP_tolmach
             this.textBox_Data.Name = "textBox_Data";
             this.textBox_Data.Size = new System.Drawing.Size(589, 23);
             this.textBox_Data.TabIndex = 30;
-            this.textBox_Data.Text = "0x0000 0x0000 0x0000";
+            this.textBox_Data.Text = "0x00000000 0x00000000";
             // 
             // button_headerCRC_calc
             // 
@@ -366,7 +355,7 @@ namespace RMAP_tolmach
             this.textBox_address.Name = "textBox_address";
             this.textBox_address.Size = new System.Drawing.Size(73, 23);
             this.textBox_address.TabIndex = 26;
-            this.textBox_address.Text = "0x00000000";
+            this.textBox_address.Text = "0x00002100";
             // 
             // label15
             // 
@@ -400,7 +389,7 @@ namespace RMAP_tolmach
             this.textBox_TransactionIdentifier.Name = "textBox_TransactionIdentifier";
             this.textBox_TransactionIdentifier.Size = new System.Drawing.Size(73, 23);
             this.textBox_TransactionIdentifier.TabIndex = 22;
-            this.textBox_TransactionIdentifier.Text = "0x0000";
+            this.textBox_TransactionIdentifier.Text = "0x3925";
             // 
             // label12
             // 
@@ -417,7 +406,7 @@ namespace RMAP_tolmach
             this.textBox_InitiatorLogicalAddress.Name = "textBox_InitiatorLogicalAddress";
             this.textBox_InitiatorLogicalAddress.Size = new System.Drawing.Size(73, 23);
             this.textBox_InitiatorLogicalAddress.TabIndex = 20;
-            this.textBox_InitiatorLogicalAddress.Text = "0x00";
+            this.textBox_InitiatorLogicalAddress.Text = "0x4B";
             // 
             // label11
             // 
@@ -445,7 +434,7 @@ namespace RMAP_tolmach
             this.textBox_ReplayAddresses.Name = "textBox_ReplayAddresses";
             this.textBox_ReplayAddresses.Size = new System.Drawing.Size(589, 23);
             this.textBox_ReplayAddresses.TabIndex = 17;
-            this.textBox_ReplayAddresses.Text = "0x00 0x00";
+            this.textBox_ReplayAddresses.Text = "0x08 0x1C 0x04 0x0d";
             // 
             // textBox_Key
             // 
@@ -453,7 +442,7 @@ namespace RMAP_tolmach
             this.textBox_Key.Name = "textBox_Key";
             this.textBox_Key.Size = new System.Drawing.Size(73, 23);
             this.textBox_Key.TabIndex = 16;
-            this.textBox_Key.Text = "0x00";
+            this.textBox_Key.Text = "0x02";
             // 
             // label9
             // 
@@ -502,10 +491,12 @@ namespace RMAP_tolmach
             // radioButton_replyAddrLength_4
             // 
             this.radioButton_replyAddrLength_4.AutoSize = true;
+            this.radioButton_replyAddrLength_4.Checked = true;
             this.radioButton_replyAddrLength_4.Location = new System.Drawing.Point(17, 32);
             this.radioButton_replyAddrLength_4.Name = "radioButton_replyAddrLength_4";
             this.radioButton_replyAddrLength_4.Size = new System.Drawing.Size(65, 19);
             this.radioButton_replyAddrLength_4.TabIndex = 1;
+            this.radioButton_replyAddrLength_4.TabStop = true;
             this.radioButton_replyAddrLength_4.Text = "4 байта";
             this.radioButton_replyAddrLength_4.UseVisualStyleBackColor = true;
             this.radioButton_replyAddrLength_4.CheckedChanged += new System.EventHandler(this.InstructionTextBoxUpdate);
@@ -513,12 +504,10 @@ namespace RMAP_tolmach
             // radioButton_replyAddrLength_0
             // 
             this.radioButton_replyAddrLength_0.AutoSize = true;
-            this.radioButton_replyAddrLength_0.Checked = true;
             this.radioButton_replyAddrLength_0.Location = new System.Drawing.Point(17, 16);
             this.radioButton_replyAddrLength_0.Name = "radioButton_replyAddrLength_0";
             this.radioButton_replyAddrLength_0.Size = new System.Drawing.Size(59, 19);
             this.radioButton_replyAddrLength_0.TabIndex = 0;
-            this.radioButton_replyAddrLength_0.TabStop = true;
             this.radioButton_replyAddrLength_0.Text = "0 байт";
             this.radioButton_replyAddrLength_0.UseVisualStyleBackColor = true;
             this.radioButton_replyAddrLength_0.CheckedChanged += new System.EventHandler(this.InstructionTextBoxUpdate);
@@ -543,6 +532,8 @@ namespace RMAP_tolmach
             // checkBox_commandCode_incAddress
             // 
             this.checkBox_commandCode_incAddress.AutoSize = true;
+            this.checkBox_commandCode_incAddress.Checked = true;
+            this.checkBox_commandCode_incAddress.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox_commandCode_incAddress.Location = new System.Drawing.Point(201, 69);
             this.checkBox_commandCode_incAddress.Name = "checkBox_commandCode_incAddress";
             this.checkBox_commandCode_incAddress.Size = new System.Drawing.Size(15, 14);
@@ -659,7 +650,7 @@ namespace RMAP_tolmach
             this.textBox_Instruction.Name = "textBox_Instruction";
             this.textBox_Instruction.Size = new System.Drawing.Size(73, 23);
             this.textBox_Instruction.TabIndex = 11;
-            this.textBox_Instruction.Text = "0x48";
+            this.textBox_Instruction.Text = "0x4d";
             this.textBox_Instruction.TextChanged += new System.EventHandler(this.InstructionControlsUpdate);
             // 
             // label4
@@ -908,7 +899,6 @@ namespace RMAP_tolmach
         private System.Windows.Forms.Button button_parsePacket;
         private System.Windows.Forms.ToolStripMenuItem copyMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearMenuItem;
-        private System.Windows.Forms.Label label22;
     }
 }
 
