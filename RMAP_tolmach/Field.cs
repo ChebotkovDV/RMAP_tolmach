@@ -11,17 +11,23 @@ namespace RMAP_tolmach
         public bool Fail { get; protected set; }
         public string Log { get; protected set; }
         public string Name { get; protected set; }
+        public bool Empty { get; protected set; }
 
         public Field()
         {
             Name = "empty";
             Length = 0;
+            Empty = true;
+            bytes = null;
+            Fail = false;
         }
         public Field(string name, int byteNumber)
         {
             Length = byteNumber;
             bytes = new byte[Length];
             Name = name;
+            Empty = false;
+            Fail = false;
         }
 
         public Field(string name, int byteNumber, string inputValue)
@@ -29,6 +35,7 @@ namespace RMAP_tolmach
             Length = byteNumber;
             Name = name;
             bytes = new byte[Length];
+            Fail = false;
             Set(inputValue);
         }
 
@@ -36,13 +43,24 @@ namespace RMAP_tolmach
         {
             Length = 1;
             bytes = new byte[1] { newValue };
+            Empty = false;
+            Fail = false;
         }
 
-        public virtual void Set (string inputValue)
+        public virtual void Set (string message)
         {
+            if (message == "")
+            {
+                Name = "empty";
+                Length = 0;
+                Empty = true;
+                bytes = null;
+                Fail = false;
+            }
+
             try
             {
-                byte[] newValue = Parse(inputValue);
+                byte[] newValue = Parse(message);
 
                 if (Length < newValue.Length)
                 {
@@ -130,6 +148,10 @@ namespace RMAP_tolmach
                 {
                     return "поле <" + Name + "> : \r\n" + Log;
                 }
+                else if (Empty)
+                {
+                    return "поле <" + Name + ">    : пусто \r\n";
+                }
                 else
                 {
                     return "поле <" + Name + ">    : ok \r\n";
@@ -145,6 +167,11 @@ namespace RMAP_tolmach
             if (Fail)
             {
                 return " FAIL ";
+            }
+
+            if (Empty)
+            {
+                return "";
             }
 
             string text = "";

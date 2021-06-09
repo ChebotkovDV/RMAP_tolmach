@@ -42,9 +42,8 @@ namespace RMAP_tolmach
         
 
 
-        public string GetRMAPPacket()
+        public string GetRMAPPacket(string divider)
         {
-            string divider = " ";
             string text = "";
             text += TargetSpWAddresses.ToString(divider);
             text += TargetLogicalAddresses.ToString(divider);
@@ -133,7 +132,7 @@ namespace RMAP_tolmach
                 int headerBytesCount =  DataLength.Length + Address.Length + ExtendedAddress.Length + 
                     TransactionIdentifier.Length + InitiatorLogicalAddress.Length + Key.Length + 
                     Instruction.Length + ProtocolIdentifier.Length + TargetLogicalAddresses.Length +
-                    (ReplyAddress.Length * ReplyAddress.Width) + (TargetSpWAddresses.Length * TargetSpWAddresses.Width);
+                    (ReplyAddress.Length * ReplyAddress.Width);
 
                 byte[] header = new byte[headerBytesCount];
 
@@ -157,13 +156,10 @@ namespace RMAP_tolmach
                 ProtocolIdentifier.ToBytes().CopyTo(header, pointer);
                 pointer += ProtocolIdentifier.Length;
                 TargetLogicalAddresses.ToBytes().CopyTo(header, pointer);
-                pointer += TargetLogicalAddresses.Length;
-                TargetSpWAddresses.ToBytes().CopyTo(header, pointer);
 
                 return header;
             }
         }
-
         public bool Fail
         {
             get
@@ -173,6 +169,15 @@ namespace RMAP_tolmach
                     ProtocolIdentifier.Fail || TargetLogicalAddresses.Fail || TargetSpWAddresses.Fail || 
                     HeaderCRC.Fail || Data.Fail || DataCRC.Fail;
             }
+        }
+
+        public void Parse (string message)
+        {
+            FieldsArray newPacket = new FieldsArray("", 1);
+            newPacket.Set(message);
+            //int targetLogicalAddressPointer = newPacket.LastIndexOf();
+
+
         }
 
     }

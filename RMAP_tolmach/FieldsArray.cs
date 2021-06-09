@@ -4,9 +4,8 @@ using System.Text;
 
 namespace RMAP_tolmach
 {
-    class FieldsArray
+    class FieldsArray : List<Field>
     {
-        public Field[] Fields { get; set; }
         public int Length { private set; get; }
         public int Width { private set; get; }
         public string Name { private set; get; }
@@ -20,33 +19,7 @@ namespace RMAP_tolmach
             this.Name = name;
             this.Empty = true;
         }
-
-        public Field this [int index]
-        {
-            get
-            {
-                if (index >= 0 && index < Length)
-                {
-                    return Fields[index];
-                }
-                else
-                {
-                    return new Field("empty", 0);
-                }
-            }
-            set
-            {
-                if (index >= 0 && index < Length)
-                {
-                    Fields[index] = value;
-                }
-                else
-                {
-                    Fail = true;
-                    Log += "    поле с индексом " + index.ToString() + " не существует \r\n";
-                }
-            }
-        }
+        
         public string Status
         {
             get
@@ -66,18 +39,19 @@ namespace RMAP_tolmach
         {
             string[] strArray = str.Split(' ');
             Length = strArray.Length;
-            Fields = new Field[Length];
+            Empty = false;
 
+
+            this.Clear();
             for (int i = 0; i<Length; i++)
             {
                 string fieldName = Name + "[" + i.ToString() + "]";
-                Fields[i] = new Field(fieldName, Width, strArray[Length - 1 - i]);
-                Empty = false;
+                this.Add(new Field(fieldName, Width, strArray[Length - 1 - i]));
 
-                if (Fields[i].Fail)
+                if (this[i].Fail)
                 {
                     Fail = true;
-                    Log += Fields[i].Status + "\r\n";
+                    Log += this[i].Status + "\r\n";
                 }
             }
 
@@ -87,7 +61,6 @@ namespace RMAP_tolmach
                 Length = 0;
                 Log = "empty";
                 Empty = true;
-                Fields = null;
             }
         }
 
@@ -103,9 +76,9 @@ namespace RMAP_tolmach
             }
 
             string text = "";
-            for (int i = 0; i < Length; i++)
+            for (int i = Length - 1; i >= 0; i--)
             {
-                text += " " + Fields[i].ToString(divider);
+                text += " " + this[i].ToString(divider);
             }
             return text;
         }
@@ -115,9 +88,11 @@ namespace RMAP_tolmach
             byte[] bytes = new byte[Length * Width];
             for (int i = 0; i < Length; i++)
             {
-                Fields[i].ToBytes().CopyTo(bytes, i * Width);
+                this[i].ToBytes().CopyTo(bytes, i * Width);
             }
             return bytes;
         }
+
+        //public bool EqualityComparer
     }
 }
