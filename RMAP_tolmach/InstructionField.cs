@@ -15,6 +15,7 @@ namespace RMAP_tolmach
             Name = "Instruction";
             Length = 1;
             this.bytes = new byte[] { 0 };
+            this.Empty = false;
 
             PacketType = new PacketType();
             CommandType = new CommandField();
@@ -25,6 +26,7 @@ namespace RMAP_tolmach
             Name = "Instruction";
             Length = 1;
             this.bytes = new byte[] { value};
+            this.Empty = false;
 
             PacketType = new PacketType(value);
             CommandType = new CommandField(value);

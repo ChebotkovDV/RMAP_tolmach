@@ -114,6 +114,7 @@ namespace RMAP_tolmach
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(3, 4);
             this.splitContainer1.MinimumSize = new System.Drawing.Size(800, 0);
             this.splitContainer1.Name = "splitContainer1";
@@ -129,8 +130,8 @@ namespace RMAP_tolmach
             // 
             this.splitContainer1.Panel2.Controls.Add(this.textBox_Console);
             this.splitContainer1.Panel2MinSize = 100;
-            this.splitContainer1.Size = new System.Drawing.Size(819, 652);
-            this.splitContainer1.SplitterDistance = 514;
+            this.splitContainer1.Size = new System.Drawing.Size(937, 757);
+            this.splitContainer1.SplitterDistance = 510;
             this.splitContainer1.TabIndex = 7;
             // 
             // tabControl_selectCommand
@@ -145,7 +146,7 @@ namespace RMAP_tolmach
             this.tabControl_selectCommand.Multiline = true;
             this.tabControl_selectCommand.Name = "tabControl_selectCommand";
             this.tabControl_selectCommand.SelectedIndex = 0;
-            this.tabControl_selectCommand.Size = new System.Drawing.Size(813, 508);
+            this.tabControl_selectCommand.Size = new System.Drawing.Size(931, 504);
             this.tabControl_selectCommand.TabIndex = 6;
             // 
             // tabPage_write
@@ -192,7 +193,7 @@ namespace RMAP_tolmach
             this.tabPage_write.Location = new System.Drawing.Point(4, 24);
             this.tabPage_write.Name = "tabPage_write";
             this.tabPage_write.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_write.Size = new System.Drawing.Size(805, 480);
+            this.tabPage_write.Size = new System.Drawing.Size(923, 476);
             this.tabPage_write.TabIndex = 0;
             this.tabPage_write.Text = "Запрос";
             this.tabPage_write.UseVisualStyleBackColor = true;
@@ -212,7 +213,7 @@ namespace RMAP_tolmach
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_packet.Location = new System.Drawing.Point(179, 13);
             this.textBox_packet.Name = "textBox_packet";
-            this.textBox_packet.Size = new System.Drawing.Size(589, 23);
+            this.textBox_packet.Size = new System.Drawing.Size(707, 23);
             this.textBox_packet.TabIndex = 40;
             // 
             // button_parsePacket
@@ -243,14 +244,14 @@ namespace RMAP_tolmach
             this.radioButton_Eep.Name = "radioButton_Eep";
             this.radioButton_Eep.Size = new System.Drawing.Size(44, 19);
             this.radioButton_Eep.TabIndex = 1;
-            this.radioButton_Eep.TabStop = true;
             this.radioButton_Eep.Text = "EEP";
             this.radioButton_Eep.UseVisualStyleBackColor = true;
             // 
             // radioButton_Eop
             // 
             this.radioButton_Eop.AutoSize = true;
-            this.radioButton_Eop.Cursor = System.Windows.Forms.Cursors.No;
+            this.radioButton_Eop.Checked = true;
+            this.radioButton_Eop.Cursor = System.Windows.Forms.Cursors.Default;
             this.radioButton_Eop.Location = new System.Drawing.Point(17, 27);
             this.radioButton_Eop.Name = "radioButton_Eop";
             this.radioButton_Eop.Size = new System.Drawing.Size(47, 19);
@@ -318,7 +319,7 @@ namespace RMAP_tolmach
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_Data.Location = new System.Drawing.Point(179, 388);
             this.textBox_Data.Name = "textBox_Data";
-            this.textBox_Data.Size = new System.Drawing.Size(589, 23);
+            this.textBox_Data.Size = new System.Drawing.Size(707, 23);
             this.textBox_Data.TabIndex = 30;
             this.textBox_Data.Text = "0x00000000 0x00000000";
             // 
@@ -432,7 +433,7 @@ namespace RMAP_tolmach
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_ReplayAddresses.Location = new System.Drawing.Point(179, 272);
             this.textBox_ReplayAddresses.Name = "textBox_ReplayAddresses";
-            this.textBox_ReplayAddresses.Size = new System.Drawing.Size(589, 23);
+            this.textBox_ReplayAddresses.Size = new System.Drawing.Size(707, 23);
             this.textBox_ReplayAddresses.TabIndex = 17;
             this.textBox_ReplayAddresses.Text = "0x08 0x1C 0x04 0x0d";
             // 
@@ -704,7 +705,7 @@ namespace RMAP_tolmach
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_TargetSpWAddresses.Location = new System.Drawing.Point(179, 96);
             this.textBox_TargetSpWAddresses.Name = "textBox_TargetSpWAddresses";
-            this.textBox_TargetSpWAddresses.Size = new System.Drawing.Size(589, 23);
+            this.textBox_TargetSpWAddresses.Size = new System.Drawing.Size(707, 23);
             this.textBox_TargetSpWAddresses.TabIndex = 0;
             this.textBox_TargetSpWAddresses.Text = "0x00 0x00";
             // 
@@ -730,7 +731,7 @@ namespace RMAP_tolmach
             this.tabPage_reply.Location = new System.Drawing.Point(4, 24);
             this.tabPage_reply.Name = "tabPage_reply";
             this.tabPage_reply.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_reply.Size = new System.Drawing.Size(805, 480);
+            this.tabPage_reply.Size = new System.Drawing.Size(923, 476);
             this.tabPage_reply.TabIndex = 1;
             this.tabPage_reply.Text = "Ответ";
             this.tabPage_reply.UseVisualStyleBackColor = true;
@@ -747,7 +748,7 @@ namespace RMAP_tolmach
             this.textBox_Console.Name = "textBox_Console";
             this.textBox_Console.ReadOnly = true;
             this.textBox_Console.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox_Console.Size = new System.Drawing.Size(805, 122);
+            this.textBox_Console.Size = new System.Drawing.Size(923, 231);
             this.textBox_Console.TabIndex = 7;
             // 
             // consoleContextMenu
@@ -801,13 +802,12 @@ namespace RMAP_tolmach
             this.clearMenuItem.Name = "clearMenuItem";
             this.clearMenuItem.Size = new System.Drawing.Size(32, 19);
             this.clearMenuItem.Text = "Очистить";
-            this.clearMenuItem.Click += clearMenuItem_Click;
             // 
             // Form_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(834, 659);
+            this.ClientSize = new System.Drawing.Size(952, 773);
             this.Controls.Add(this.splitContainer1);
             this.MinimumSize = new System.Drawing.Size(850, 600);
             this.Name = "Form_main";

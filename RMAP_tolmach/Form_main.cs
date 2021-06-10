@@ -13,17 +13,29 @@ namespace RMAP_tolmach
     public partial class Form_main : Form
     {
         
-        private WritePacket writePacket;
+        private RmapPacket writePacket;
 
         public Form_main()
         {
             InitializeComponent();
 
             this.consoleContextMenu.Items.AddRange(new[] { clearMenuItem, copyMenuItem });
-            
+            this.copyMenuItem.Click += CopyMenuItem_Click;
+            this.clearMenuItem.Click += ClearMenuItem_Click;
 
 
-            writePacket = new WritePacket();
+            writePacket = new RmapPacket();
+        }
+
+        private void ClearMenuItem_Click(object sender, EventArgs e)
+        {
+            textBox_Console.Clear();
+        }
+
+        private void CopyMenuItem_Click(object sender, EventArgs e)
+        {
+            // если выделен текст в текстовом поле, то копируем его в буфер
+            Clipboard.SetText(textBox_Console.SelectedText);
         }
 
 
@@ -44,7 +56,7 @@ namespace RMAP_tolmach
 
             textBox_packet.Text = writePacket.GetRMAPPacket(" ");
             Report("---  Создан новый пакет ---\r\n");
-            Report(writePacket.Status + "\r\n");
+            Report(writePacket.Status);
         }
 
         private void UpdateAllFields()

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RMAP_tolmach
 {
-    class WritePacket
+    class RmapPacket
     {
         public FieldsArray TargetSpWAddresses { get; set; }
         public Field TargetLogicalAddresses { get; set; }
@@ -22,7 +22,7 @@ namespace RMAP_tolmach
         public Field DataCRC { get; set; }
         public bool EEP { get; set; }
 
-        public WritePacket()
+        public RmapPacket()
         {
             TargetSpWAddresses = new FieldsArray("targetSpWAddresses", 1);
             TargetLogicalAddresses = new Field("targetLogicalAddresses", 1, "0xFE");
@@ -97,7 +97,7 @@ namespace RMAP_tolmach
                 {
                     text += "ВНИМАНИЕ : введенное количество Replay-адресов не соответствует заявленному значению в поле Instruction \r\n";
                 }
-                if (DataLength.ToInt32() != Data.Length)
+                if (DataLength.ToInt32() != (Data.Length * Data.Width))
                 {
                     text += "ВНИМАНИЕ : введенное количество слов данных не соответствует заявленному значению в поле DataLength \r\n";
                 }
@@ -110,7 +110,6 @@ namespace RMAP_tolmach
                     text += "Не сходится CRC данных \r\n";
                 }
                 
-                text += "\r\n";
                 return text;
             }
         }
