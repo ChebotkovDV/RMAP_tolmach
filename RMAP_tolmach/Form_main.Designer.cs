@@ -801,6 +801,7 @@ namespace RMAP_tolmach
             this.clearMenuItem.Name = "clearMenuItem";
             this.clearMenuItem.Size = new System.Drawing.Size(32, 19);
             this.clearMenuItem.Text = "Очистить";
+            this.clearMenuItem.Click += clearMenuItem_Click;
             // 
             // Form_main
             // 
