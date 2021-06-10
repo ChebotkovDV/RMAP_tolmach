@@ -69,11 +69,11 @@ namespace RMAP_tolmach
                     return;
                 }
 
-                // заполняем массив value с конца. Первые символы остаются нулями.
+                // заполняем массив value. Старшие символы остаются нулями.
                 int numberOfNulls = Length - newValue.Length;
-                for (int i = newValue.Length - 1; i >= 0; i--)
+                for (int i = 0; i < newValue.Length; i++)
                 {
-                    bytes[i + numberOfNulls] = newValue[i];
+                    bytes[i] = newValue[i];
                 }
                 Fail = false;
                 Log = "";
