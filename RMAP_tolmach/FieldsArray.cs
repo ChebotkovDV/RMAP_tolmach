@@ -161,7 +161,7 @@ namespace RMAP_tolmach
             byte[] bytes = new byte[Length * Width];
             for (int i = 0; i < Length; i++)
             {
-                this[i].ToBytes().CopyTo(bytes, i * Width);
+                this[i].ToArray().CopyTo(bytes, i * Width);
             }
             return bytes;
         }

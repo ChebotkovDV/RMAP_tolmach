@@ -11,7 +11,7 @@ namespace RMAP_tolmach
         public Field ProtocolIdentifier { get; set; }
         public InstructionField Instruction { get; set; }
         public Field Key { get; set; }
-        public FieldsArray ReplyAddress { get; set; }
+        public FieldsArray ReplyAddresses { get; set; }
         public Field InitiatorLogicalAddress { get; set; }
         public Field TransactionIdentifier { get; set; }
         public Field ExtendedAddress { get; set; }
@@ -29,7 +29,7 @@ namespace RMAP_tolmach
             ProtocolIdentifier = new Field("ProtocolIdentifier", 1, "0x01");
             Instruction = new InstructionField();
             Key = new Field("Key", 1, "0x00");
-            ReplyAddress = new FieldsArray("replyAddresses", 1);
+            ReplyAddresses = new FieldsArray("replyAddresses", 1);
             InitiatorLogicalAddress = new Field("InitiatorLogicalAddress", 1, "0xFE");
             TransactionIdentifier = new Field("TransactionIdentifier", 2);
             ExtendedAddress = new Field("ExtendedAddress", 1);
@@ -54,7 +54,7 @@ namespace RMAP_tolmach
             text += ProtocolIdentifier.ToString(prefix, byteDivider);
             text += Instruction.ToString(prefix, byteDivider);
             text += Key.ToString(prefix, byteDivider);
-            text += ReplyAddress.ToString(prefix, fieldDivider, byteDivider);
+            text += ReplyAddresses.ToString(prefix, fieldDivider, byteDivider);
             text += InitiatorLogicalAddress.ToString(prefix, byteDivider);
             text += TransactionIdentifier.ToString(prefix, byteDivider);
             text += ExtendedAddress.ToString(prefix, byteDivider);
@@ -83,7 +83,7 @@ namespace RMAP_tolmach
                 text += ProtocolIdentifier.Status;
                 text += Instruction.Status;
                 text += Key.Status;
-                text += ReplyAddress.Status;
+                text += ReplyAddresses.Status;
                 text += InitiatorLogicalAddress.Status;
                 text += TransactionIdentifier.Status;
                 text += ExtendedAddress.Status;
@@ -113,7 +113,7 @@ namespace RMAP_tolmach
                 {
                     text += "ВНИМАНИЕ : одно или несколько полей не заполнены \r\n";
                 }
-                if (Instruction.ReplyAddressLength != ReplyAddress.Length)
+                if (Instruction.ReplyAddressLength != ReplyAddresses.Length)
                 {
                     text += "ВНИМАНИЕ : введенное количество Replay-адресов не соответствует заявленному значению в поле Instruction \r\n";
                 }
@@ -188,16 +188,16 @@ namespace RMAP_tolmach
             get
             {
                 List<byte> temp = new List<byte>();
-                temp.AddRange(DataLength.ToBytes());
-                temp.AddRange(Address.ToBytes());
-                temp.AddRange(ExtendedAddress.ToBytes());
-                temp.AddRange(TransactionIdentifier.ToBytes());
-                temp.AddRange(InitiatorLogicalAddress.ToBytes());
-                temp.AddRange(ReplyAddress.ToBytes());
-                temp.AddRange(Key.ToBytes());
-                temp.AddRange(Instruction.ToBytes());
-                temp.AddRange(ProtocolIdentifier.ToBytes());
-                temp.AddRange(TargetLogicalAddresses.ToBytes());
+                temp.AddRange(DataLength.ToArray());
+                temp.AddRange(Address.ToArray());
+                temp.AddRange(ExtendedAddress.ToArray());
+                temp.AddRange(TransactionIdentifier.ToArray());
+                temp.AddRange(InitiatorLogicalAddress.ToArray());
+                temp.AddRange(ReplyAddresses.ToBytes());
+                temp.AddRange(Key.ToArray());
+                temp.AddRange(Instruction.ToArray());
+                temp.AddRange(ProtocolIdentifier.ToArray());
+                temp.AddRange(TargetLogicalAddresses.ToArray());
                 return temp.ToArray();
             }
         }
@@ -206,7 +206,7 @@ namespace RMAP_tolmach
             get
             {
                 return DataLength.Fail || Address.Fail || ExtendedAddress.Fail || TransactionIdentifier.Fail || 
-                    InitiatorLogicalAddress.Fail || ReplyAddress.Fail || Key.Fail || Instruction.Fail ||
+                    InitiatorLogicalAddress.Fail || ReplyAddresses.Fail || Key.Fail || Instruction.Fail ||
                     ProtocolIdentifier.Fail || TargetLogicalAddresses.Fail || TargetSpWAddresses.Fail || 
                     HeaderCRC.Fail || Data.Fail || DataCRC.Fail;
             }
@@ -216,7 +216,7 @@ namespace RMAP_tolmach
             get
             {
                 return DataLength.Empty || Address.Empty || ExtendedAddress.Empty || TransactionIdentifier.Empty ||
-                    InitiatorLogicalAddress.Empty || ReplyAddress.Empty || Key.Empty || Instruction.Empty ||
+                    InitiatorLogicalAddress.Empty || ReplyAddresses.Empty || Key.Empty || Instruction.Empty ||
                     ProtocolIdentifier.Empty || TargetLogicalAddresses.Empty || TargetSpWAddresses.Empty ||
                     HeaderCRC.Empty || Data.Empty || DataCRC.Empty;
             }
@@ -230,7 +230,7 @@ namespace RMAP_tolmach
                 ProtocolIdentifier = newPacket.ProtocolIdentifier;
                 Instruction = newPacket.Instruction;
                 Key = newPacket.Key;
-                ReplyAddress = newPacket.ReplyAddress;
+                ReplyAddresses = newPacket.ReplyAddresses;
                 InitiatorLogicalAddress = newPacket.InitiatorLogicalAddress;
                 TransactionIdentifier = newPacket.TransactionIdentifier;
                 ExtendedAddress = newPacket.ExtendedAddress;

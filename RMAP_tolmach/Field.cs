@@ -5,19 +5,32 @@ using System.Linq;
 
 namespace RMAP_tolmach
 {
-    internal class Field
+    internal class Field : List<byte>
     {
-        protected byte[] bytes;
         public int Width { get; protected set; }
         public bool Fail { get; protected set; }
         public string Log { get; protected set; }
         public string Name { get; protected set; }
-        public bool Empty { get; protected set; }
-       
+        public bool Empty
+        {
+            set
+            {
+                if (value)
+                {
+                    this.Clear();
+                }
+            }
+            get
+            {
+                return this.Count == 0;
+            }
+        }
+
         public Field()
         {
             Width = 1;
-            bytes = new byte[1];
+            this.Clear();
+            this.Add(0);
             Name = "newField";
             Empty = true;
             Fail = false;
@@ -26,37 +39,36 @@ namespace RMAP_tolmach
         public Field(string name, int byteNumber)
         {
             Width = byteNumber;
-            bytes = new byte[Width];
+            this.Clear();
+            for (int i = 0; i < byteNumber; i++)
+            {
+                this.Add(0);
+            }
             Name = name;
             Empty = false;
             Fail = false;
         }
-        public Field(byte[] newValue)
-        {
-            Name = "noname";
-            this.Set(newValue);
-        }
 
-        public Field(string name, int byteNumber, string inputValue)
+        public Field(string name, int width, string inputValue)
         {
-            Width = byteNumber;
+            Width = width;
             Name = name;
-            bytes = new byte[Width];
-            Fail = false;
             Set(inputValue);
         }
 
         public virtual void Set (byte newValue)
         {
             Width = 1;
-            bytes = new byte[1] { newValue };
+            this.Clear();
+            this.Add(newValue);
             Empty = false;
             Fail = false;
         }
         public virtual void Set(byte [] newValue)
         {
             Width = newValue.Length;
-            bytes = newValue;
+            this.Clear();
+            this.AddRange(newValue);
             Empty = false;
             Fail = false;
         }
@@ -66,6 +78,7 @@ namespace RMAP_tolmach
             Empty = false;
             Log = "";
             Fail = false;
+            this.Clear();
 
             if (message == "")
             {
@@ -74,7 +87,7 @@ namespace RMAP_tolmach
             }
 
             byte[] newValue = Hex.ParseToBytes(message, out string log);
-            if (Log != "")
+            if (log != "")
             {
                 Fail = true;
                 Log = log;
@@ -85,21 +98,26 @@ namespace RMAP_tolmach
             {
                 Fail = true;
                 Log = "    данные не помещаются в поле \r\n";
+                this.AddRange(newValue[..Width]);
                 return;
             }
 
-            // заполняем массив value. Старшие символы остаются нулями.
-            for (int i = 0; i < newValue.Length; i++)
+            if (newValue.Length == 0)
             {
-                bytes[i] = newValue[i];
+                Fail = true;
+                Empty = true;
+                Log = "    данные не распознанны \r\n";
+                return;
             }
+
+            this.AddRange(newValue);
         }
 
         public override bool Equals(object obj)
         {
             if (obj.GetType() != this.GetType()) return false;
             Field newField = (Field)obj;
-            return this.bytes.SequenceEqual(newField.bytes);
+            return this.SequenceEqual(newField);
         }
 
         public string Status
@@ -140,17 +158,9 @@ namespace RMAP_tolmach
             text += prefix;
             for (int i = Width - 1; i >= 0; i--)
             {
-                text += bytes[i].ToString("X2") + divider;
+                text += this[i].ToString("X2") + divider;
             }
             return text;
-        }
-        public byte[] ToBytes()
-        {
-            if (Empty)
-            {
-                return null;
-            }
-            return bytes;
         }
         public int ToInt32()
         {
@@ -158,11 +168,9 @@ namespace RMAP_tolmach
             {
                 return 0;
             }
-
-            byte[] extendedArray = new byte[4] { 0, 0, 0, 0 };
-            for (int i = 0; (i < 4) && (i < bytes.Length); i++)
-                extendedArray[i] = bytes[i];
-            return BitConverter.ToInt32(extendedArray,0);
+            byte[] temp = new byte[4];
+            this.CopyTo(temp, 0);
+            return BitConverter.ToInt32(temp,0);
         }
         public byte Byte0
         {
@@ -172,7 +180,7 @@ namespace RMAP_tolmach
                 {
                     return 0;
                 }
-                return bytes[0];
+                return this[0];
             }
         }
 

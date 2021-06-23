@@ -56,15 +56,12 @@ namespace RMAP_tolmach
         public static byte[] ParseToBytes(string newStr, out string log)
         {
             log = "";
+            // удаляем префиксы и пробелы
+            newStr = newStr.Insert(0, " ");
+            newStr = newStr.Replace(" 0x", string.Empty);
             newStr = newStr.Replace(" ", string.Empty);
-            // удаляем префикс, если он есть
-            if (newStr.Substring(0, 2) == "0x")
-            {
-                newStr = newStr.Remove(0, 2);
-            }
             // добавляем ноль в начало строки, на случай, если количество символов строки окажется нечетным
             newStr = newStr.Insert(0, "0");
-
             // преобразуем строку в массив byte, считывая по два символа, начиная с конца строки
             int byteNumber = newStr.Length / 2;
             byte[] byteArray = new byte[byteNumber];
@@ -173,7 +170,7 @@ namespace RMAP_tolmach
             int headerCrcPointer = (initiatorLogicalAddresPointer - 11);
             try
             {
-                newPacket.ReplyAddress.Set(bytes[replyAddressesRange]);
+                newPacket.ReplyAddresses.Set(bytes[replyAddressesRange]);
                 newPacket.InitiatorLogicalAddress.Set(bytes[initiatorLogicalAddresPointer]);
                 newPacket.TransactionIdentifier.Set(bytes[transactionIdentifierRange]);
                 newPacket.ExtendedAddress.Set(bytes[extendedAddressPointer]);

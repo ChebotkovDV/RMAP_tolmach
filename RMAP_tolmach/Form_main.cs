@@ -71,7 +71,7 @@ namespace RMAP_tolmach
             currentPacket.ProtocolIdentifier.Set(textBox_ProtocolIdentifier.Text);
             currentPacket.Instruction.Set(textBox_Instruction.Text);
             currentPacket.Key.Set(textBox_Key.Text);
-            currentPacket.ReplyAddress.Set(textBox_ReplayAddresses.Text);
+            currentPacket.ReplyAddresses.Set(textBox_ReplayAddresses.Text);
             currentPacket.InitiatorLogicalAddress.Set(textBox_InitiatorLogicalAddress.Text);
             currentPacket.TransactionIdentifier.Set(textBox_TransactionIdentifier.Text);
             currentPacket.ExtendedAddress.Set(textBox_extendedAddress.Text);
@@ -201,7 +201,7 @@ namespace RMAP_tolmach
             textBox_ProtocolIdentifier.Text = currentPacket.ProtocolIdentifier.ToString("0x", "");
             textBox_Instruction.Text = currentPacket.Instruction.ToString("0x", "");
             textBox_Key.Text = currentPacket.Key.ToString("0x", "");
-            textBox_ReplayAddresses.Text = currentPacket.ReplyAddress.ToString(" 0x", "", "");
+            textBox_ReplayAddresses.Text = currentPacket.ReplyAddresses.ToString(" 0x", "", "");
             textBox_InitiatorLogicalAddress.Text = currentPacket.InitiatorLogicalAddress.ToString("0x", "");
             textBox_TransactionIdentifier.Text = currentPacket.TransactionIdentifier.ToString("0x", "");
             textBox_extendedAddress.Text = currentPacket.ExtendedAddress.ToString("0x", "");

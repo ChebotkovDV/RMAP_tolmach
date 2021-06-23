@@ -14,8 +14,7 @@ namespace RMAP_tolmach
         {
             Name = "Instruction";
             Width = 1;
-            this.bytes = new byte[] { 0 };
-            this.Empty = false;
+            this.Set(0);
 
             PacketType = new PacketType();
             CommandType = new CommandField();
@@ -25,8 +24,7 @@ namespace RMAP_tolmach
         {
             Name = "Instruction";
             Width = 1;
-            this.bytes = new byte[] { value};
-            this.Empty = false;
+            this.Set(value);
 
             PacketType = new PacketType(value);
             CommandType = new CommandField(value);
@@ -44,7 +42,7 @@ namespace RMAP_tolmach
         public override void Set(string newValue)
         {
             base.Set(newValue);
-            if (base.Fail)
+            if (base.Fail || base.Empty)
             {
                 PacketType = new PacketType(0xff);
                 CommandType = new CommandField(0);
@@ -52,15 +50,15 @@ namespace RMAP_tolmach
             }
             else
             {
-                PacketType = new PacketType(this.bytes[0]);
-                CommandType = new CommandField(this.bytes[0]);
-                AddressLength = new AddressLength(this.bytes[0]);
+                PacketType = new PacketType(this[0]);
+                CommandType = new CommandField(this[0]);
+                AddressLength = new AddressLength(this[0]);
             }
         }
         public override void Set(byte newValue)
         {
             base.Set(newValue);
-            if (base.Fail)
+            if (base.Fail || base.Empty)
             {
                 PacketType = new PacketType(0xff);
                 CommandType = new CommandField(0);
@@ -68,9 +66,9 @@ namespace RMAP_tolmach
             }
             else
             {
-                PacketType = new PacketType(this.bytes[0]);
-                CommandType = new CommandField(this.bytes[0]);
-                AddressLength = new AddressLength(this.bytes[0]);
+                PacketType = new PacketType(this[0]);
+                CommandType = new CommandField(this[0]);
+                AddressLength = new AddressLength(this[0]);
             }
         }
         // приводит value в соответствие с PacketType, CommandType, AddressLength
@@ -85,7 +83,10 @@ namespace RMAP_tolmach
             newValue[2] = CommandType.Bits[0];
             newValue[1] = AddressLength.Bits[1];
             newValue[0] = AddressLength.Bits[0];
-            newValue.CopyTo(base.bytes, 0);
+
+            byte[] newInstruction = new byte[1];
+            newValue.CopyTo(newInstruction, 0);
+            this.Set(newInstruction);
         }
 
     }
