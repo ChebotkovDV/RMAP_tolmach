@@ -6,7 +6,9 @@ namespace RMAP_tolmach
 {
     static class Hex
     {
+        //
         // возвращает контрольную сумму для заданной последовательности байт
+        //
         public static byte GetCrc(byte [] original)
         {
             byte[] lut = {
@@ -51,8 +53,9 @@ namespace RMAP_tolmach
             }
             return crc;
         }
-
+        //
         // переводит строку в массив байт
+        //
         public static byte[] ParseToBytes(string newStr, out string log)
         {
             log = "";
@@ -89,9 +92,10 @@ namespace RMAP_tolmach
             }
             return byteArray;
         }
-
+        //
         // Определяет, заканчивается ли строка символом конца пакета
         // Возвращает символ конца пакета и строку без символа конца пакета
+        //
         public static bool endOfPacketIsCorrected(string message,out string endSymbols, out string cut)
         {
             cut = message;
@@ -113,8 +117,9 @@ namespace RMAP_tolmach
             cut = message[..^3];
             return true;
         }
-
+        //
         // создает объект RmapPacket на основе HEX
+        //
         static public bool ParseToRmap(string message, Field targetLogicalAddresses, out RmapPacket newPacket, out string log)
         {
             log = "";
@@ -177,7 +182,7 @@ namespace RMAP_tolmach
                 newPacket.Address.Set(bytes[addressesRange]);
                 newPacket.DataLength.Set(bytes[dataLengthRange]);
                 newPacket.HeaderCRC.Set(bytes[headerCrcPointer]);
-                newPacket.TargetSpWAddresses.Set(bytes[spwAddressesStart..spwAddressesEnd]);
+                newPacket.SpwAddresses.Set(bytes[spwAddressesStart..spwAddressesEnd]);
             }
             catch (IndexOutOfRangeException)
             {
@@ -197,6 +202,53 @@ namespace RMAP_tolmach
             }
 
             return true;
+        }
+        //
+        // создает HEX на основе объекта RmapPacket
+        //
+        static public string GetRMAPPacket(RmapPacket packet, string byteDivider)
+        {
+            string text = "";
+            text += packet.SpwAddresses.ToString("", "", byteDivider);
+            if (packet.Instruction.PacketType.Command)
+            {
+                text += packet.TargetLogicalAddresses.ToString("", byteDivider);
+                text += packet.ProtocolIdentifier.ToString("", byteDivider);
+                text += packet.Instruction.ToString("", byteDivider);
+                text += packet.Key.ToString("", byteDivider);
+                text += packet.ReplyAddresses.ToString("", "", byteDivider);
+                text += packet.InitiatorLogicalAddress.ToString("", byteDivider);
+                text += packet.TransactionIdentifier.ToString("", byteDivider);
+                text += packet.ExtendedAddress.ToString("", byteDivider);
+                text += packet.Address.ToString("", byteDivider);
+                text += packet.DataLength.ToString("", byteDivider);
+            }
+            if (packet.Instruction.PacketType.Reply)
+            {
+                text += packet.InitiatorLogicalAddress.ToString("", byteDivider);
+                text += packet.ProtocolIdentifier.ToString("", byteDivider);
+                text += packet.Instruction.ToString("", byteDivider);
+                text += packet.Status.ToString("", byteDivider);
+                text += packet.TargetLogicalAddresses.ToString("", byteDivider);
+                text += packet.TransactionIdentifier.ToString("", byteDivider);
+            }
+            text += packet.HeaderCRC.ToString("", byteDivider);
+
+            if (packet.Instruction.DataExist)
+            {
+                text += packet.Data.ToString("", "", byteDivider);
+                text += packet.DataCRC.ToString("", byteDivider);
+            }
+
+            if (packet.EEP)
+            {
+                text += "  EEP";
+            }
+            else
+            {
+                text += "  EOP";
+            }
+            return text;
         }
     }
 }

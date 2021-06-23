@@ -36,7 +36,7 @@ namespace RMAP_tolmach
             Fail = false;
         }
 
-        public Field(string name, int byteNumber)
+        public Field(int byteNumber, string name)
         {
             Width = byteNumber;
             this.Clear();
@@ -48,8 +48,13 @@ namespace RMAP_tolmach
             Empty = false;
             Fail = false;
         }
-
-        public Field(string name, int width, string inputValue)
+        public Field(string name, byte inputValue)
+        {
+            Width = 1;
+            Name = name;
+            Set(inputValue);
+        }
+        public Field(int width, string name, string inputValue)
         {
             Width = width;
             Name = name;
@@ -158,7 +163,7 @@ namespace RMAP_tolmach
             text += prefix;
             for (int i = Width - 1; i >= 0; i--)
             {
-                text += this[i].ToString("X2") + divider;
+                text += divider + this[i].ToString("X2");
             }
             return text;
         }

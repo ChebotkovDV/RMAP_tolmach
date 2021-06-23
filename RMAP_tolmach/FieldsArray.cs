@@ -88,7 +88,7 @@ namespace RMAP_tolmach
                 if (current != "" && current != " ")
                 {
                     string fieldName = Name + "[" + i.ToString() + "]";
-                    Field newField = new Field(fieldName, Width, current);
+                    Field newField = new Field(Width, fieldName, current);
                     this.Add(newField);
 
                     if (newField.Fail)
@@ -123,7 +123,7 @@ namespace RMAP_tolmach
                 Array.Copy(bytes, i, newData, 0, Width);
 
                 string newFieldName = this.Name + "[" + this.Length.ToString() + "]";
-                Field newField = new Field(newFieldName, Width);
+                Field newField = new Field(Width, newFieldName);
                 newField.Set(newData);
 
                 this.Add(newField);

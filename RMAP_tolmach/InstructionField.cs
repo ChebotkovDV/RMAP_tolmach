@@ -6,9 +6,9 @@ namespace RMAP_tolmach
 {
     class InstructionField : Field
     {
-        public PacketType PacketType { get; set; }
-        public CommandField CommandType { get; set; }
-        public AddressLength AddressLength { get; set; }
+        public PacketType PacketType { get; private set; }
+        public CommandField CommandType { get; private set; }
+        public AddressLength AddressLength { get; private set; }
 
         public InstructionField()
         {
@@ -31,6 +31,15 @@ namespace RMAP_tolmach
             AddressLength = new AddressLength(value);
         }
 
+        public bool DataExist
+        {
+            get
+            {
+                bool writeCommand = PacketType.Command && CommandType.Write;
+                bool readReply = PacketType.Reply && CommandType.Read;
+                return writeCommand || readReply;
+            }
+        }
         public int ReplyAddressLength
         {
             get

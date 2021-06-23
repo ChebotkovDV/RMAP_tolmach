@@ -6,11 +6,12 @@ namespace RMAP_tolmach
 {
     class RmapPacket
     {
-        public FieldsArray TargetSpWAddresses { get; set; }
+        public FieldsArray SpwAddresses { get; set; }
         public Field TargetLogicalAddresses { get; set; }
         public Field ProtocolIdentifier { get; set; }
         public InstructionField Instruction { get; set; }
         public Field Key { get; set; }
+        public Field Status { get; set; }
         public FieldsArray ReplyAddresses { get; set; }
         public Field InitiatorLogicalAddress { get; set; }
         public Field TransactionIdentifier { get; set; }
@@ -24,61 +25,39 @@ namespace RMAP_tolmach
 
         public RmapPacket()
         {
-            TargetSpWAddresses = new FieldsArray("targetSpWAddresses", 1);
-            TargetLogicalAddresses = new Field("targetLogicalAddresses", 1, "0xFE");
-            ProtocolIdentifier = new Field("ProtocolIdentifier", 1, "0x01");
+            SpwAddresses = new FieldsArray("TargetSpWAddresses", 1);
+            TargetLogicalAddresses = new Field("TargetLogicalAddresses", 0xFE);
+            ProtocolIdentifier = new Field("ProtocolIdentifier", 0x01);
             Instruction = new InstructionField();
-            Key = new Field("Key", 1, "0x00");
-            ReplyAddresses = new FieldsArray("replyAddresses", 1);
-            InitiatorLogicalAddress = new Field("InitiatorLogicalAddress", 1, "0xFE");
-            TransactionIdentifier = new Field("TransactionIdentifier", 2);
-            ExtendedAddress = new Field("ExtendedAddress", 1);
-            Address = new Field("Address", 4);
-            DataLength = new Field("DataLength", 3);
-            HeaderCRC = new Field("HeaderCRC", 1);
+            Key = new Field("Key", 0x00);
+            Status = new Field("Status", 0x00);
+            ReplyAddresses = new FieldsArray("ReplyAddresses", 1);
+            InitiatorLogicalAddress = new Field("InitiatorLogicalAddress", 0xFE);
+            TransactionIdentifier = new Field(2, "TransactionIdentifier");
+            ExtendedAddress = new Field(1, "ExtendedAddress");
+            Address = new Field(4, "Address");
+            DataLength = new Field(3, "DataLength");
+            HeaderCRC = new Field(1, "HeaderCRC");
             Data = new FieldsArray("Data", 4);
-            DataCRC = new Field("DataCRC", 1);
+            DataCRC = new Field(1, "DataCRC");
             EEP = false;
         }
         
 
         public string GetRMAPPacket()
         {
-            return GetRMAPPacket("", "", " ");
+            return GetRMAPPacket(" ");
         }
-        public string GetRMAPPacket(string prefix, string fieldDivider, string byteDivider)
+        public string GetRMAPPacket(string byteDivider)
         {
-            string text = "";
-            text += TargetSpWAddresses.ToString(prefix, fieldDivider, byteDivider);
-            text += TargetLogicalAddresses.ToString(prefix, byteDivider);
-            text += ProtocolIdentifier.ToString(prefix, byteDivider);
-            text += Instruction.ToString(prefix, byteDivider);
-            text += Key.ToString(prefix, byteDivider);
-            text += ReplyAddresses.ToString(prefix, fieldDivider, byteDivider);
-            text += InitiatorLogicalAddress.ToString(prefix, byteDivider);
-            text += TransactionIdentifier.ToString(prefix, byteDivider);
-            text += ExtendedAddress.ToString(prefix, byteDivider);
-            text += Address.ToString(prefix, byteDivider);
-            text += DataLength.ToString(prefix, byteDivider);
-            text += HeaderCRC.ToString(prefix, byteDivider);
-            text += Data.ToString(prefix, fieldDivider, byteDivider);
-            text += DataCRC.ToString(prefix, byteDivider);
-            if (EEP)
-            {
-                text += "  EEP";
-            }
-            else
-            {
-                text += "  EOP";
-            }
-            return text;
+            return Hex.GetRMAPPacket(this, byteDivider);
         }
         public string FieldsStatus
         {
             get
             {
                 string text = "";
-                text += TargetSpWAddresses.Status;
+                text += SpwAddresses.Status;
                 text += TargetLogicalAddresses.Status;
                 text += ProtocolIdentifier.Status;
                 text += Instruction.Status;
@@ -96,7 +75,7 @@ namespace RMAP_tolmach
                 return text;
             }
         }
-        public string Status
+        public string GetReport
         {
             get
             {
@@ -113,10 +92,12 @@ namespace RMAP_tolmach
                 {
                     text += "ВНИМАНИЕ : одно или несколько полей не заполнены \r\n";
                 }
-                if (Instruction.ReplyAddressLength != ReplyAddresses.Length)
+
+                if (Instruction.ReplyAddressLength != ReplyAddresses.Length)        //!
                 {
                     text += "ВНИМАНИЕ : введенное количество Replay-адресов не соответствует заявленному значению в поле Instruction \r\n";
                 }
+
                 if (DataLength.ToInt32() != (Data.Length * Data.Width))
                 {
                     text += "ВНИМАНИЕ : введенное количество слов данных не соответствует заявленному значению в поле DataLength \r\n";
@@ -207,7 +188,7 @@ namespace RMAP_tolmach
             {
                 return DataLength.Fail || Address.Fail || ExtendedAddress.Fail || TransactionIdentifier.Fail || 
                     InitiatorLogicalAddress.Fail || ReplyAddresses.Fail || Key.Fail || Instruction.Fail ||
-                    ProtocolIdentifier.Fail || TargetLogicalAddresses.Fail || TargetSpWAddresses.Fail || 
+                    ProtocolIdentifier.Fail || TargetLogicalAddresses.Fail || SpwAddresses.Fail || 
                     HeaderCRC.Fail || Data.Fail || DataCRC.Fail;
             }
         }
@@ -217,7 +198,7 @@ namespace RMAP_tolmach
             {
                 return DataLength.Empty || Address.Empty || ExtendedAddress.Empty || TransactionIdentifier.Empty ||
                     InitiatorLogicalAddress.Empty || ReplyAddresses.Empty || Key.Empty || Instruction.Empty ||
-                    ProtocolIdentifier.Empty || TargetLogicalAddresses.Empty || TargetSpWAddresses.Empty ||
+                    ProtocolIdentifier.Empty || TargetLogicalAddresses.Empty || SpwAddresses.Empty ||
                     HeaderCRC.Empty || Data.Empty || DataCRC.Empty;
             }
         }
@@ -225,7 +206,7 @@ namespace RMAP_tolmach
         {
             if (Hex.ParseToRmap(message, TargetLogicalAddresses, out RmapPacket newPacket, out log))
             {
-                TargetSpWAddresses = newPacket.TargetSpWAddresses;
+                SpwAddresses = newPacket.SpwAddresses;
                 TargetLogicalAddresses = newPacket.TargetLogicalAddresses;
                 ProtocolIdentifier = newPacket.ProtocolIdentifier;
                 Instruction = newPacket.Instruction;

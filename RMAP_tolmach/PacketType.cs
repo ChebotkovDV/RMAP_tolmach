@@ -8,24 +8,29 @@ namespace RMAP_tolmach
     {
         public bool Command { get; set;}
         public bool Reply { get; set; }
-
+        public bool Uncorrect { get; private set; }
         public PacketType()
         {
             Command = false;
             Reply = true;
+            Uncorrect = false;
         }
         public PacketType(byte instruction)
         {
             Command = false;
             Reply = false;
+            Uncorrect = true;
             if ((instruction >> 6) == 1)
             {
                 Command = true;
+                Uncorrect = false;
             }
             if ((instruction >> 6) == 0)
             {
                 Reply = true;
+                Uncorrect = false;
             }
+
         }
 
         public new string ToString ()

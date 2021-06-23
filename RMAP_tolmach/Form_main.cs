@@ -61,12 +61,12 @@ namespace RMAP_tolmach
             UpdateAllFields();
             textBox_packet.Text = currentPacket.GetRMAPPacket();
             Report("---  Создан новый пакет ---\r\n");
-            Report(currentPacket.Status);
+            Report(currentPacket.GetReport);
         }
 
         private void UpdateAllFields()
         {
-            currentPacket.TargetSpWAddresses.Set(textBox_TargetSpWAddresses.Text);
+            currentPacket.SpwAddresses.Set(textBox_TargetSpWAddresses.Text);
             currentPacket.TargetLogicalAddresses.Set(textBox_TargetLogicalAddresses.Text);
             currentPacket.ProtocolIdentifier.Set(textBox_ProtocolIdentifier.Text);
             currentPacket.Instruction.Set(textBox_Instruction.Text);
@@ -110,7 +110,7 @@ namespace RMAP_tolmach
             radioButton_replyAddrLength_8.CheckedChanged -= new System.EventHandler(this.InstructionTextBoxUpdate);
             radioButton_replyAddrLength_12.CheckedChanged -= new System.EventHandler(this.InstructionTextBoxUpdate);
             // обновляем элементы управления
-            checkBox_commandCode_rw.Checked = currentPacket.Instruction.CommandType.WriteRead;
+            checkBox_commandCode_rw.Checked = currentPacket.Instruction.CommandType.Write;
             checkBox_commandCode_verify.Checked = currentPacket.Instruction.CommandType.VerifyDataBeforeWrite;
             checkBox_commandCode_reply.Checked = currentPacket.Instruction.CommandType.Reply;
             checkBox_commandCode_incAddress.Checked = currentPacket.Instruction.CommandType.IncrementAddress;
@@ -139,7 +139,7 @@ namespace RMAP_tolmach
         {
             currentPacket.Instruction.PacketType.Command = radioButton_packetType_command.Checked && ! radioButton_packetType_reply.Checked;
             currentPacket.Instruction.PacketType.Reply = ! radioButton_packetType_command.Checked && radioButton_packetType_reply.Checked;
-            currentPacket.Instruction.CommandType.WriteRead = checkBox_commandCode_rw.Checked;
+            currentPacket.Instruction.CommandType.Write = checkBox_commandCode_rw.Checked;
             currentPacket.Instruction.CommandType.VerifyDataBeforeWrite = checkBox_commandCode_verify.Checked;
             currentPacket.Instruction.CommandType.Reply = checkBox_commandCode_reply.Checked;
             currentPacket.Instruction.CommandType.IncrementAddress = checkBox_commandCode_incAddress.Checked;
@@ -197,7 +197,7 @@ namespace RMAP_tolmach
 
         private void UpdateAllControls()
         {
-            textBox_TargetSpWAddresses.Text = currentPacket.TargetSpWAddresses.ToString(" 0x","","");
+            textBox_TargetSpWAddresses.Text = currentPacket.SpwAddresses.ToString(" 0x","","");
             textBox_ProtocolIdentifier.Text = currentPacket.ProtocolIdentifier.ToString("0x", "");
             textBox_Instruction.Text = currentPacket.Instruction.ToString("0x", "");
             textBox_Key.Text = currentPacket.Key.ToString("0x", "");
