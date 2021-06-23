@@ -94,21 +94,26 @@ namespace RMAP_tolmach
 
         }
         // обновление элементов управления полем "Instruction":
-        private void InstructionControlsUpdate(object sender, EventArgs e)
+        private void TextBoxInstruction_Chenged(object sender, EventArgs e)
         {
             currentPacket.Instruction.Set(textBox_Instruction.Text);
 
+            if (currentPacket.Instruction.Fail)
+            {
+                return;
+            }
+
             // отписываем InstructionTextBoxUpdate от событий, чтобы не зациклиться:
-            checkBox_commandCode_incAddress.CheckedChanged -= new System.EventHandler(this.InstructionTextBoxUpdate);
-            checkBox_commandCode_rw.CheckedChanged -= new System.EventHandler(this.InstructionTextBoxUpdate);
-            checkBox_commandCode_verify.CheckedChanged -= new System.EventHandler(this.InstructionTextBoxUpdate);
-            checkBox_commandCode_reply.CheckedChanged -= new System.EventHandler(this.InstructionTextBoxUpdate);
-            radioButton_packetType_reply.CheckedChanged -= new System.EventHandler(this.InstructionTextBoxUpdate);
-            radioButton_packetType_command.CheckedChanged -= new System.EventHandler(this.InstructionTextBoxUpdate);
-            radioButton_replyAddrLength_0.CheckedChanged -= new System.EventHandler(this.InstructionTextBoxUpdate);
-            radioButton_replyAddrLength_4.CheckedChanged -= new System.EventHandler(this.InstructionTextBoxUpdate);
-            radioButton_replyAddrLength_8.CheckedChanged -= new System.EventHandler(this.InstructionTextBoxUpdate);
-            radioButton_replyAddrLength_12.CheckedChanged -= new System.EventHandler(this.InstructionTextBoxUpdate);
+            checkBox_commandCode_incAddress.CheckedChanged -= new System.EventHandler(this.InstructionControls_Chenged);
+            checkBox_commandCode_rw.CheckedChanged -= new System.EventHandler(this.InstructionControls_Chenged);
+            checkBox_commandCode_verify.CheckedChanged -= new System.EventHandler(this.InstructionControls_Chenged);
+            checkBox_commandCode_reply.CheckedChanged -= new System.EventHandler(this.InstructionControls_Chenged);
+            radioButton_packetType_reply.CheckedChanged -= new System.EventHandler(this.InstructionControls_Chenged);
+            radioButton_packetType_command.CheckedChanged -= new System.EventHandler(this.InstructionControls_Chenged);
+            radioButton_replyAddrLength_0.CheckedChanged -= new System.EventHandler(this.InstructionControls_Chenged);
+            radioButton_replyAddrLength_4.CheckedChanged -= new System.EventHandler(this.InstructionControls_Chenged);
+            radioButton_replyAddrLength_8.CheckedChanged -= new System.EventHandler(this.InstructionControls_Chenged);
+            radioButton_replyAddrLength_12.CheckedChanged -= new System.EventHandler(this.InstructionControls_Chenged);
             // обновляем элементы управления
             checkBox_commandCode_rw.Checked = currentPacket.Instruction.CommandType.Write;
             checkBox_commandCode_verify.Checked = currentPacket.Instruction.CommandType.VerifyDataBeforeWrite;
@@ -121,21 +126,22 @@ namespace RMAP_tolmach
             radioButton_replyAddrLength_8.Checked = currentPacket.Instruction.AddressLength.ToInt() == 8;
             radioButton_replyAddrLength_12.Checked = currentPacket.Instruction.AddressLength.ToInt() == 12;
             // Возвращаем подписку на событие
-            checkBox_commandCode_incAddress.CheckedChanged += new System.EventHandler(this.InstructionTextBoxUpdate);
-            checkBox_commandCode_rw.CheckedChanged += new System.EventHandler(this.InstructionTextBoxUpdate);
-            checkBox_commandCode_verify.CheckedChanged += new System.EventHandler(this.InstructionTextBoxUpdate);
-            checkBox_commandCode_reply.CheckedChanged += new System.EventHandler(this.InstructionTextBoxUpdate);
-            radioButton_packetType_reply.CheckedChanged += new System.EventHandler(this.InstructionTextBoxUpdate);
-            radioButton_packetType_command.CheckedChanged += new System.EventHandler(this.InstructionTextBoxUpdate);
-            radioButton_replyAddrLength_0.CheckedChanged += new System.EventHandler(this.InstructionTextBoxUpdate);
-            radioButton_replyAddrLength_4.CheckedChanged += new System.EventHandler(this.InstructionTextBoxUpdate);
-            radioButton_replyAddrLength_8.CheckedChanged += new System.EventHandler(this.InstructionTextBoxUpdate);
-            radioButton_replyAddrLength_12.CheckedChanged += new System.EventHandler(this.InstructionTextBoxUpdate);
+            checkBox_commandCode_incAddress.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
+            checkBox_commandCode_rw.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
+            checkBox_commandCode_verify.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
+            checkBox_commandCode_reply.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
+            radioButton_packetType_reply.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
+            radioButton_packetType_command.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
+            radioButton_replyAddrLength_0.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
+            radioButton_replyAddrLength_4.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
+            radioButton_replyAddrLength_8.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
+            radioButton_replyAddrLength_12.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
 
+            DisableUnusableControls();
         }
 
         // обновление текстбокса поля Instruction соглано текущему состоянию других элементов управления
-        private void InstructionTextBoxUpdate(object sender, EventArgs e)
+        private void InstructionControls_Chenged(object sender, EventArgs e)
         {
             currentPacket.Instruction.PacketType.Command = radioButton_packetType_command.Checked && ! radioButton_packetType_reply.Checked;
             currentPacket.Instruction.PacketType.Reply = ! radioButton_packetType_command.Checked && radioButton_packetType_reply.Checked;
@@ -149,9 +155,63 @@ namespace RMAP_tolmach
             currentPacket.Instruction.AddressLength.Set12 = radioButton_replyAddrLength_12.Checked;
             currentPacket.Instruction.Update();
 
-            textBox_Instruction.TextChanged -= new System.EventHandler(this.InstructionControlsUpdate);
+            textBox_Instruction.TextChanged -= new System.EventHandler(this.TextBoxInstruction_Chenged);
             textBox_Instruction.Text = currentPacket.Instruction.ToString();
-            textBox_Instruction.TextChanged += new System.EventHandler(this.InstructionControlsUpdate);
+            textBox_Instruction.TextChanged += new System.EventHandler(this.TextBoxInstruction_Chenged);
+
+            DisableUnusableControls();
+        }
+        private void DisableUnusableControls()
+        {
+            EnableAllControls();
+            if (currentPacket.Instruction.PacketType.Command)
+            {
+                textBox_Status.Enabled = false;
+                label_Status.Enabled = false;
+            }
+            if (currentPacket.Instruction.PacketType.Reply)
+            {
+                textBox_ReplayAddresses.Enabled = false;
+                textBox_extendedAddress.Enabled = false;
+                textBox_address.Enabled = false;
+                textBox_Key.Enabled = false;
+                label_ReplayAddress.Enabled = false;
+                label_ExtendedAddress.Enabled = false;
+                label_Address.Enabled = false;
+                label_Key.Enabled = false;
+            }
+            if (!currentPacket.Instruction.DataExist)
+            {
+                textBox_Data.Enabled = false;
+                textBox_dataCRC.Enabled = false;
+                textBox_DataLength.Enabled = false;
+                label_Data.Enabled = false;
+                label_DataCrc.Enabled = false;
+                label_DataLength.Enabled = false;
+                button_daraCRC_calc.Enabled = false;
+            }
+        }
+        private void EnableAllControls()
+        {
+            textBox_Status.Enabled = true;
+            textBox_ReplayAddresses.Enabled = true;
+            textBox_extendedAddress.Enabled = true;
+            textBox_address.Enabled = true;
+            textBox_Key.Enabled = true;
+            textBox_Data.Enabled = true;
+            textBox_dataCRC.Enabled = true;
+            textBox_DataLength.Enabled = true;
+
+            label_Status.Enabled = true;
+            label_ReplayAddress.Enabled = true;
+            label_ExtendedAddress.Enabled = true;
+            label_Address.Enabled = true;
+            label_Key.Enabled = true;
+            label_Data.Enabled = true;
+            label_DataCrc.Enabled = true;
+            label_DataLength.Enabled = true;
+
+            button_daraCRC_calc.Enabled = true;
         }
 
         private void button_headerCRC_calc_Click(object sender, EventArgs e)
