@@ -13,7 +13,7 @@ namespace RMAP_tolmach
         public InstructionField()
         {
             Name = "Instruction";
-            Length = 1;
+            Width = 1;
             this.bytes = new byte[] { 0 };
             this.Empty = false;
 
@@ -24,7 +24,7 @@ namespace RMAP_tolmach
         public InstructionField(byte value)
         {
             Name = "Instruction";
-            Length = 1;
+            Width = 1;
             this.bytes = new byte[] { value};
             this.Empty = false;
 
@@ -42,6 +42,22 @@ namespace RMAP_tolmach
         }
 
         public override void Set(string newValue)
+        {
+            base.Set(newValue);
+            if (base.Fail)
+            {
+                PacketType = new PacketType(0xff);
+                CommandType = new CommandField(0);
+                AddressLength = new AddressLength(0);
+            }
+            else
+            {
+                PacketType = new PacketType(this.bytes[0]);
+                CommandType = new CommandField(this.bytes[0]);
+                AddressLength = new AddressLength(this.bytes[0]);
+            }
+        }
+        public override void Set(byte newValue)
         {
             base.Set(newValue);
             if (base.Fail)

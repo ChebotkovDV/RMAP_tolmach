@@ -91,6 +91,7 @@ namespace RMAP_tolmach
             this.tabPage_reply = new System.Windows.Forms.TabPage();
             this.textBox_Console = new System.Windows.Forms.TextBox();
             this.consoleContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.statusMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label13 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
@@ -107,6 +108,7 @@ namespace RMAP_tolmach
             this.groupBox_replyLength.SuspendLayout();
             this.groupBox_commandCodes.SuspendLayout();
             this.groupBox_packetType.SuspendLayout();
+            this.consoleContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -266,7 +268,7 @@ namespace RMAP_tolmach
             this.textBox_DataLength.Name = "textBox_DataLength";
             this.textBox_DataLength.Size = new System.Drawing.Size(73, 23);
             this.textBox_DataLength.TabIndex = 37;
-            this.textBox_DataLength.Text = "0x000040";
+            this.textBox_DataLength.Text = "0x000008";
             // 
             // label20
             // 
@@ -321,7 +323,7 @@ namespace RMAP_tolmach
             this.textBox_Data.Name = "textBox_Data";
             this.textBox_Data.Size = new System.Drawing.Size(707, 23);
             this.textBox_Data.TabIndex = 30;
-            this.textBox_Data.Text = "0x00000000 0x00000000";
+            this.textBox_Data.Text = "0x01020304 0x01020304";
             // 
             // button_headerCRC_calc
             // 
@@ -753,8 +755,16 @@ namespace RMAP_tolmach
             // 
             // consoleContextMenu
             // 
+            this.consoleContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusMenuItem});
             this.consoleContextMenu.Name = "clearConsole";
-            this.consoleContextMenu.Size = new System.Drawing.Size(61, 4);
+            this.consoleContextMenu.Size = new System.Drawing.Size(195, 26);
+            // 
+            // statusMenuItem
+            // 
+            this.statusMenuItem.Name = "statusMenuItem";
+            this.statusMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.statusMenuItem.Text = "Вывести статус полей";
             // 
             // label13
             // 
@@ -828,6 +838,7 @@ namespace RMAP_tolmach
             this.groupBox_commandCodes.PerformLayout();
             this.groupBox_packetType.ResumeLayout(false);
             this.groupBox_packetType.PerformLayout();
+            this.consoleContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -900,6 +911,7 @@ namespace RMAP_tolmach
         private System.Windows.Forms.Button button_parsePacket;
         private System.Windows.Forms.ToolStripMenuItem copyMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem statusMenuItem;
     }
 }
 

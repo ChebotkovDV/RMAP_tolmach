@@ -1,144 +1,106 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace RMAP_tolmach
 {
-    class Field
+    internal class Field
     {
         protected byte[] bytes;
-        public int Length { get; protected set; }
+        public int Width { get; protected set; }
         public bool Fail { get; protected set; }
         public string Log { get; protected set; }
         public string Name { get; protected set; }
         public bool Empty { get; protected set; }
-
+       
         public Field()
         {
-            Name = "empty";
-            Length = 0;
+            Width = 1;
+            bytes = new byte[1];
+            Name = "newField";
             Empty = true;
-            bytes = null;
             Fail = false;
         }
+
         public Field(string name, int byteNumber)
         {
-            Length = byteNumber;
-            bytes = new byte[Length];
+            Width = byteNumber;
+            bytes = new byte[Width];
             Name = name;
             Empty = false;
             Fail = false;
+        }
+        public Field(byte[] newValue)
+        {
+            Name = "noname";
+            this.Set(newValue);
         }
 
         public Field(string name, int byteNumber, string inputValue)
         {
-            Length = byteNumber;
+            Width = byteNumber;
             Name = name;
-            bytes = new byte[Length];
+            bytes = new byte[Width];
             Fail = false;
             Set(inputValue);
         }
 
-        public void Set (byte newValue)
+        public virtual void Set (byte newValue)
         {
-            Length = 1;
+            Width = 1;
             bytes = new byte[1] { newValue };
             Empty = false;
             Fail = false;
         }
-
+        public virtual void Set(byte [] newValue)
+        {
+            Width = newValue.Length;
+            bytes = newValue;
+            Empty = false;
+            Fail = false;
+        }
         public virtual void Set (string message)
         {
+
+            Empty = false;
+            Log = "";
+            Fail = false;
+
             if (message == "")
             {
-                Name = "empty";
-                Length = 0;
                 Empty = true;
-                bytes = null;
-                Fail = false;
+                return;
             }
 
-            try
-            {
-                byte[] newValue = Parse(message);
-
-                if (Length < newValue.Length)
-                {
-                    Fail = true;
-                    Log += "    данные не помещаются в поле \r\n";
-                    return;
-                }
-
-                // заполняем массив value. Старшие символы остаются нулями.
-                int numberOfNulls = Length - newValue.Length;
-                for (int i = 0; i < newValue.Length; i++)
-                {
-                    bytes[i] = newValue[i];
-                }
-                Fail = false;
-                Log = "";
-            }
-            catch
+            byte[] newValue = Hex.ParseToBytes(message, out string log);
+            if (Log != "")
             {
                 Fail = true;
-                Log += "    введена не корректная строка \r\n";
+                Log = log;
+                return;
             }
 
+            if (Width < newValue.Length)
+            {
+                Fail = true;
+                Log = "    данные не помещаются в поле \r\n";
+                return;
+            }
+
+            // заполняем массив value. Старшие символы остаются нулями.
+            for (int i = 0; i < newValue.Length; i++)
+            {
+                bytes[i] = newValue[i];
+            }
         }
-        // преобразует строку, содержащую число в 16-ричной форме записи, в массив byte
-        protected byte[] Parse(string inputValue)
+
+        public override bool Equals(object obj)
         {
-            string newStr = inputValue.Trim();
-            // удаляем префикс, если он есть
-            if (newStr.Substring(0, 2) == "0x")
-            {
-                newStr = newStr.Remove(0, 2);
-            }
-            // добавляем ноль в начало строки, на случай, если количество символов строки окажется нечетным
-            newStr = newStr.Insert(0, "0");
-
-            int byteNumber = newStr.Length / 2;
-
-            // разбиваем исходную строку на массив подстрок по два символа
-            string[] strArray = new string[byteNumber];
-            for(int i = 0; i < byteNumber; i++)
-            {
-                // копируем два последних символа исходной строки
-                strArray[i] = newStr.Substring(newStr.Length - 2, 2);
-                // и удаляем их
-                newStr = newStr.Remove(newStr.Length - 2, 2);
-            }
-
-            // преобразуем массив подстрок в массив byte
-            byte[] byteArray = new byte[byteNumber];
-
-            for (int i = 0; i < byteNumber; i++)
-            {
-                try
-                {
-                    byteArray[i] = Convert.ToByte(strArray[i], 16);
-                }
-                catch (FormatException)
-                {
-                    Log += "    значение <" + strArray[i] + "> имеет не корректный формат \r\n";
-                    Fail = true;
-                }
-                catch (OverflowException)
-                {
-                    Log += "    значение <" + strArray[i] + "> выходит за пределы 0..255 \r\n";
-                    Fail = true;
-                }
-                catch (ArgumentException)
-                {
-                    Log += "    значение <" + strArray[i] + "> не является 16-разрядным числом \r\n";
-                    Fail = true;
-                }
-            }
-            return byteArray;
+            if (obj.GetType() != this.GetType()) return false;
+            Field newField = (Field)obj;
+            return this.bytes.SequenceEqual(newField.bytes);
         }
-
-
-
 
         public string Status
         {
@@ -160,9 +122,9 @@ namespace RMAP_tolmach
         }
         public override string ToString()
         {
-            return ToString(" ");
+            return ToString("","");
         }
-        public string ToString(string divider)
+        public string ToString(string prefix, string divider)
         {
             if (Fail)
             {
@@ -175,18 +137,28 @@ namespace RMAP_tolmach
             }
 
             string text = "";
-            for (int i = Length - 1; i >= 0; i--)
+            text += prefix;
+            for (int i = Width - 1; i >= 0; i--)
             {
-                text += divider + bytes[i].ToString("X2");
+                text += bytes[i].ToString("X2") + divider;
             }
             return text;
         }
         public byte[] ToBytes()
         {
+            if (Empty)
+            {
+                return null;
+            }
             return bytes;
         }
         public int ToInt32()
         {
+            if (Empty)
+            {
+                return 0;
+            }
+
             byte[] extendedArray = new byte[4] { 0, 0, 0, 0 };
             for (int i = 0; (i < 4) && (i < bytes.Length); i++)
                 extendedArray[i] = bytes[i];
@@ -196,6 +168,10 @@ namespace RMAP_tolmach
         {
             get
             {
+                if (Empty)
+                {
+                    return 0;
+                }
                 return bytes[0];
             }
         }

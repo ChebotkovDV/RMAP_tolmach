@@ -38,27 +38,31 @@ namespace RMAP_tolmach
             HeaderCRC = new Field("HeaderCRC", 1);
             Data = new FieldsArray("Data", 4);
             DataCRC = new Field("DataCRC", 1);
+            EEP = false;
         }
         
 
-
-        public string GetRMAPPacket(string divider)
+        public string GetRMAPPacket()
+        {
+            return GetRMAPPacket("", "", " ");
+        }
+        public string GetRMAPPacket(string prefix, string fieldDivider, string byteDivider)
         {
             string text = "";
-            text += TargetSpWAddresses.ToString(divider);
-            text += TargetLogicalAddresses.ToString(divider);
-            text += ProtocolIdentifier.ToString(divider);
-            text += Instruction.ToString(divider);
-            text += Key.ToString(divider);
-            text += ReplyAddress.ToString(divider);
-            text += InitiatorLogicalAddress.ToString(divider);
-            text += TransactionIdentifier.ToString(divider);
-            text += ExtendedAddress.ToString(divider);
-            text += Address.ToString(divider);
-            text += DataLength.ToString(divider);
-            text += HeaderCRC.ToString(divider);
-            text += Data.ToString(divider);
-            text += DataCRC.ToString(divider);
+            text += TargetSpWAddresses.ToString(prefix, fieldDivider, byteDivider);
+            text += TargetLogicalAddresses.ToString(prefix, byteDivider);
+            text += ProtocolIdentifier.ToString(prefix, byteDivider);
+            text += Instruction.ToString(prefix, byteDivider);
+            text += Key.ToString(prefix, byteDivider);
+            text += ReplyAddress.ToString(prefix, fieldDivider, byteDivider);
+            text += InitiatorLogicalAddress.ToString(prefix, byteDivider);
+            text += TransactionIdentifier.ToString(prefix, byteDivider);
+            text += ExtendedAddress.ToString(prefix, byteDivider);
+            text += Address.ToString(prefix, byteDivider);
+            text += DataLength.ToString(prefix, byteDivider);
+            text += HeaderCRC.ToString(prefix, byteDivider);
+            text += Data.ToString(prefix, fieldDivider, byteDivider);
+            text += DataCRC.ToString(prefix, byteDivider);
             if (EEP)
             {
                 text += "  EEP";
@@ -69,7 +73,7 @@ namespace RMAP_tolmach
             }
             return text;
         }
-        public string Status
+        public string FieldsStatus
         {
             get
             {
@@ -89,10 +93,22 @@ namespace RMAP_tolmach
                 text += Data.Status;
                 text += DataCRC.Status;
                 text += "\r\n";
+                return text;
+            }
+        }
+        public string Status
+        {
+            get
+            {
+                string text = "";
                 text += "Packet type = " + Instruction.PacketType.ToString() + "\r\n";
                 text += "Command : " + Instruction.CommandType.ToString() + "\r\n";
                 text += "Reply address length - " + Instruction.AddressLength.ToString() + " bytes\r\n";
 
+                if (Fail)
+                {
+                    text += "ВНИМАНИЕ : одно или несколько полей заполнены не корректно \r\n";
+                }
                 if (Instruction.ReplyAddressLength != ReplyAddress.Length)
                 {
                     text += "ВНИМАНИЕ : введенное количество Replay-адресов не соответствует заявленному значению в поле Instruction \r\n";
@@ -101,11 +117,11 @@ namespace RMAP_tolmach
                 {
                     text += "ВНИМАНИЕ : введенное количество слов данных не соответствует заявленному значению в поле DataLength \r\n";
                 }
-                if ( HeaderCRC.Byte0 != Crc.Calc(Header))
+                if (! HeaderCrcIsCorrected)
                 {
                     text += "Не сходится CRC заголовка \r\n";
                 }
-                if (DataCRC.Byte0 != Crc.Calc(Data.ToBytes()))
+                if (! DataCrcIsCorrected)
                 {
                     text += "Не сходится CRC данных \r\n";
                 }
@@ -113,47 +129,86 @@ namespace RMAP_tolmach
                 return text;
             }
         }
+        private bool HeaderCrcIsCorrected
+        { 
+            get 
+            { 
+                if (!HeaderCRC.Fail && !HeaderCRC.Empty)
+                {
+                    return (HeaderCRC.Byte0 == Hex.GetCrc(Header));
+                }
+                else
+                {
+                    return false;
+                }
+            } 
+        }
+        private bool DataCrcIsCorrected
+        {
+            get
+            {
+                if (Data.Empty || Data.Fail)
+                {
+                    return true;
+                }
+                else if (DataCRC.Fail || DataCRC.Empty)
+                {
+                    return false;
+                }
+                else
+                {
+                    return (DataCRC.Byte0 == Hex.GetCrc(Data.ToBytes()));
+                }
+            }
+        }
 
         public void UpdateHeaderCrc()
         {
-            HeaderCRC.Set(Crc.Calc(Header));
+            HeaderCRC.Set(Hex.GetCrc(Header));
         }
         public void UpdateDataCrc()
         {
-            byte[] data = Data.ToBytes();
-            byte crc = Crc.Calc(data);
-            DataCRC.Set(crc);
+            if (Data.Empty)
+            {
+                DataCRC.Set("");
+            }
+            else
+            {
+                byte[] data = Data.ToBytes();
+                byte crc = Hex.GetCrc(data);
+                DataCRC.Set(crc);
+            }
         }
         public byte [] Header
         {
             get
             {
-                int headerBytesCount =  DataLength.Length + Address.Length + ExtendedAddress.Length + 
-                    TransactionIdentifier.Length + InitiatorLogicalAddress.Length + Key.Length + 
-                    Instruction.Length + ProtocolIdentifier.Length + TargetLogicalAddresses.Length +
+                int headerBytesCount =  DataLength.Width + Address.Width + ExtendedAddress.Width + 
+                    TransactionIdentifier.Width + InitiatorLogicalAddress.Width + Key.Width + 
+                    Instruction.Width + ProtocolIdentifier.Width + TargetLogicalAddresses.Width +
                     (ReplyAddress.Length * ReplyAddress.Width);
 
                 byte[] header = new byte[headerBytesCount];
 
                 int pointer = 0;
                 DataLength.ToBytes().CopyTo(header, pointer);
-                pointer += DataLength.Length;
+                pointer += DataLength.Width;
                 Address.ToBytes().CopyTo(header, pointer);
-                pointer += Address.Length;
+                pointer += Address.Width;
                 ExtendedAddress.ToBytes().CopyTo(header, pointer);
-                pointer += ExtendedAddress.Length;
+                pointer += ExtendedAddress.Width;
                 TransactionIdentifier.ToBytes().CopyTo(header, pointer);
-                pointer += TransactionIdentifier.Length;
+                pointer += TransactionIdentifier.Width;
                 InitiatorLogicalAddress.ToBytes().CopyTo(header, pointer);
-                pointer += InitiatorLogicalAddress.Length;
+                pointer += InitiatorLogicalAddress.Width;
                 ReplyAddress.ToBytes().CopyTo(header, pointer);
                 pointer += ReplyAddress.Length;
                 Key.ToBytes().CopyTo(header, pointer);
-                pointer += Key.Length;
+                pointer += Key.Width;
                 Instruction.ToBytes().CopyTo(header, pointer);
-                pointer += Instruction.Length;
+                pointer += Instruction.Width;
                 ProtocolIdentifier.ToBytes().CopyTo(header, pointer);
-                pointer += ProtocolIdentifier.Length;
+                pointer += ProtocolIdentifier.Width;
                 TargetLogicalAddresses.ToBytes().CopyTo(header, pointer);
 
                 return header;
@@ -170,13 +225,26 @@ namespace RMAP_tolmach
             }
         }
 
-        public void Parse (string message)
+        public void Parse (string message, out string log)
         {
-            FieldsArray newPacket = new FieldsArray("", 1);
-            newPacket.Set(message);
-            //int targetLogicalAddressPointer = newPacket.LastIndexOf();
-
-
+            if (Hex.ParseToRmap(message, TargetLogicalAddresses, out RmapPacket newPacket, out log))
+            {
+                TargetSpWAddresses = newPacket.TargetSpWAddresses;
+                TargetLogicalAddresses = newPacket.TargetLogicalAddresses;
+                ProtocolIdentifier = newPacket.ProtocolIdentifier;
+                Instruction = newPacket.Instruction;
+                Key = newPacket.Key;
+                ReplyAddress = newPacket.ReplyAddress;
+                InitiatorLogicalAddress = newPacket.InitiatorLogicalAddress;
+                TransactionIdentifier = newPacket.TransactionIdentifier;
+                ExtendedAddress = newPacket.ExtendedAddress;
+                Address = newPacket.Address;
+                DataLength = newPacket.DataLength;
+                HeaderCRC = newPacket.HeaderCRC;
+                Data = newPacket.Data;
+                DataCRC = newPacket.DataCRC;
+                EEP = newPacket.EEP;
+            }
         }
 
     }
