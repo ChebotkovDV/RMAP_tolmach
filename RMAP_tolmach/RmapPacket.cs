@@ -109,6 +109,10 @@ namespace RMAP_tolmach
                 {
                     text += "ВНИМАНИЕ : одно или несколько полей заполнены не корректно \r\n";
                 }
+                if (Empty)
+                {
+                    text += "ВНИМАНИЕ : одно или несколько полей не заполнены \r\n";
+                }
                 if (Instruction.ReplyAddressLength != ReplyAddress.Length)
                 {
                     text += "ВНИМАНИЕ : введенное количество Replay-адресов не соответствует заявленному значению в поле Instruction \r\n";
@@ -183,35 +187,18 @@ namespace RMAP_tolmach
         {
             get
             {
-                int headerBytesCount =  DataLength.Width + Address.Width + ExtendedAddress.Width + 
-                    TransactionIdentifier.Width + InitiatorLogicalAddress.Width + Key.Width + 
-                    Instruction.Width + ProtocolIdentifier.Width + TargetLogicalAddresses.Width +
-                    (ReplyAddress.Length * ReplyAddress.Width);
-
-                byte[] header = new byte[headerBytesCount];
-
-                int pointer = 0;
-                DataLength.ToBytes().CopyTo(header, pointer);
-                pointer += DataLength.Width;
-                Address.ToBytes().CopyTo(header, pointer);
-                pointer += Address.Width;
-                ExtendedAddress.ToBytes().CopyTo(header, pointer);
-                pointer += ExtendedAddress.Width;
-                TransactionIdentifier.ToBytes().CopyTo(header, pointer);
-                pointer += TransactionIdentifier.Width;
-                InitiatorLogicalAddress.ToBytes().CopyTo(header, pointer);
-                pointer += InitiatorLogicalAddress.Width;
-                ReplyAddress.ToBytes().CopyTo(header, pointer);
-                pointer += ReplyAddress.Length;
-                Key.ToBytes().CopyTo(header, pointer);
-                pointer += Key.Width;
-                Instruction.ToBytes().CopyTo(header, pointer);
-                pointer += Instruction.Width;
-                ProtocolIdentifier.ToBytes().CopyTo(header, pointer);
-                pointer += ProtocolIdentifier.Width;
-                TargetLogicalAddresses.ToBytes().CopyTo(header, pointer);
-
-                return header;
+                List<byte> temp = new List<byte>();
+                temp.AddRange(DataLength.ToBytes());
+                temp.AddRange(Address.ToBytes());
+                temp.AddRange(ExtendedAddress.ToBytes());
+                temp.AddRange(TransactionIdentifier.ToBytes());
+                temp.AddRange(InitiatorLogicalAddress.ToBytes());
+                temp.AddRange(ReplyAddress.ToBytes());
+                temp.AddRange(Key.ToBytes());
+                temp.AddRange(Instruction.ToBytes());
+                temp.AddRange(ProtocolIdentifier.ToBytes());
+                temp.AddRange(TargetLogicalAddresses.ToBytes());
+                return temp.ToArray();
             }
         }
         public bool Fail
@@ -224,7 +211,16 @@ namespace RMAP_tolmach
                     HeaderCRC.Fail || Data.Fail || DataCRC.Fail;
             }
         }
-
+        public bool Empty
+        {
+            get
+            {
+                return DataLength.Empty || Address.Empty || ExtendedAddress.Empty || TransactionIdentifier.Empty ||
+                    InitiatorLogicalAddress.Empty || ReplyAddress.Empty || Key.Empty || Instruction.Empty ||
+                    ProtocolIdentifier.Empty || TargetLogicalAddresses.Empty || TargetSpWAddresses.Empty ||
+                    HeaderCRC.Empty || Data.Empty || DataCRC.Empty;
+            }
+        }
         public void Parse (string message, out string log)
         {
             if (Hex.ParseToRmap(message, TargetLogicalAddresses, out RmapPacket newPacket, out log))

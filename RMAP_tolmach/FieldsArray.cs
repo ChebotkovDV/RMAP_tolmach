@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+
 
 namespace RMAP_tolmach
 {
@@ -24,6 +25,13 @@ namespace RMAP_tolmach
             { 
                 return this.Count == 0; 
             } 
+        }
+        public int BytesCount
+        {
+            get
+            {
+                return this.Length * this.Width;
+            }
         }
 
         public FieldsArray(string name, int width)

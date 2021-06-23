@@ -53,10 +53,10 @@ namespace RMAP_tolmach
         }
 
         // переводит строку в массив байт
-        public static byte[] ParseToBytes(string inputStr, out string log)
+        public static byte[] ParseToBytes(string newStr, out string log)
         {
             log = "";
-            string newStr = inputStr.Trim();
+            newStr = newStr.Replace(" ", string.Empty);
             // удаляем префикс, если он есть
             if (newStr.Substring(0, 2) == "0x")
             {
@@ -67,28 +67,27 @@ namespace RMAP_tolmach
 
             // преобразуем строку в массив byte, считывая по два символа, начиная с конца строки
             int byteNumber = newStr.Length / 2;
-            string[] strArray = new string[byteNumber];
             byte[] byteArray = new byte[byteNumber];
 
             for (int i = 0; i < byteNumber; i++)
             {
+                string currentByte = newStr.Substring(newStr.Length - 2, 2);
                 try
                 {
-                    string currentByte = newStr.Substring(newStr.Length - 2, 2);
                     byteArray[i] = Convert.ToByte(currentByte, 16);
                     newStr = newStr.Remove(newStr.Length - 2, 2);
                 }
                 catch (FormatException)
                 {
-                    log += "    значение <" + strArray[i] + "> имеет не корректный формат \r\n";
+                    log += "    значение <" + currentByte + "> имеет не корректный формат \r\n";
                 }
                 catch (OverflowException)
                 {
-                    log += "    значение <" + strArray[i] + "> выходит за пределы 0..255 \r\n";
+                    log += "    значение <" + currentByte + "> выходит за пределы 0..255 \r\n";
                 }
                 catch (ArgumentException)
                 {
-                    log += "    значение <" + strArray[i] + "> не является 16-разрядным числом \r\n";
+                    log += "    значение <" + currentByte + "> не является 16-разрядным числом \r\n";
                 }
             }
             return byteArray;
