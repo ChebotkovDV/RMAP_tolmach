@@ -4,21 +4,21 @@ using System.Text;
 
 namespace RMAP_tolmach
 {
-    class CommandField
+    class CommandType
     {
         public bool Write { get; set; }
         public bool VerifyDataBeforeWrite { get; set; }
         public bool Reply { get; set; }
         public bool IncrementAddress { get; set; }
 
-        public CommandField()
+        public CommandType()
         {
             Write = false;
             VerifyDataBeforeWrite = false;
             Reply = false;
             IncrementAddress = false;
         }
-        public CommandField(byte instruction)
+        public CommandType(byte instruction)
         {
             Write = ((instruction >> 5) & 1) == 1;
             VerifyDataBeforeWrite = ((instruction >> 4) & 1) == 1;
@@ -54,7 +54,7 @@ namespace RMAP_tolmach
             {
                 return "Write, single address, don’t verify before writing, send reply";
             }
-            else if (! Write && VerifyDataBeforeWrite && ! Reply && ! IncrementAddress)
+            else if (Write && ! VerifyDataBeforeWrite && Reply && IncrementAddress)
             {
                 return "Write, incrementing addresses, don’t verify before writing, send reply";
             }

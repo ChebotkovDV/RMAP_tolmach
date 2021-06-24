@@ -8,7 +8,7 @@ namespace RMAP_tolmach
     {
         public bool Command { get; set;}
         public bool Reply { get; set; }
-        public bool Uncorrect { get; private set; }
+        public bool Uncorrect { get; set; }
         public PacketType()
         {
             Command = false;
@@ -30,21 +30,18 @@ namespace RMAP_tolmach
                 Reply = true;
                 Uncorrect = false;
             }
-
         }
-
         public new string ToString ()
         {
-            string text = "Uncorrected";
-            if (Command && !Reply)
+            if (Command && !Reply && !Uncorrect)
             {
-                text = "Command";
+                return "Command";
             }
-            if (Reply && !Command)
+            if (Reply && !Command && !Uncorrect)
             {
-                text = "Reply";
+                return "Reply";
             }
-            return text;
+            return "Uncorrected";
         }
         public BitArray Bits
         {
@@ -52,6 +49,7 @@ namespace RMAP_tolmach
             {
                 BitArray bits = new BitArray(2, false);
                 bits[0] = Command;
+                bits[1] = Uncorrect;
                 return bits;
             }
         }

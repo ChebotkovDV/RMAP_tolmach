@@ -76,10 +76,10 @@ namespace RMAP_tolmach
             this.radioButton_packetType_reply = new System.Windows.Forms.RadioButton();
             this.radioButton_packetType_command = new System.Windows.Forms.RadioButton();
             this.groupBox_commandCodes = new System.Windows.Forms.GroupBox();
-            this.checkBox_commandCode_incAddress = new System.Windows.Forms.CheckBox();
-            this.checkBox_commandCode_reply = new System.Windows.Forms.CheckBox();
-            this.checkBox_commandCode_verify = new System.Windows.Forms.CheckBox();
-            this.checkBox_commandCode_rw = new System.Windows.Forms.CheckBox();
+            this.checkBox_commandCodeIncrement = new System.Windows.Forms.CheckBox();
+            this.checkBox_commandCodeReply = new System.Windows.Forms.CheckBox();
+            this.checkBox_commandCodeVerify = new System.Windows.Forms.CheckBox();
+            this.checkBox_commandCodeWrite = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -347,7 +347,7 @@ namespace RMAP_tolmach
             this.textBox_dataCRC.Name = "textBox_dataCRC";
             this.textBox_dataCRC.Size = new System.Drawing.Size(73, 23);
             this.textBox_dataCRC.TabIndex = 33;
-            this.textBox_dataCRC.Text = "0x00";
+            this.textBox_dataCRC.Text = "0x7D";
             // 
             // label_DataCrc
             // 
@@ -393,7 +393,7 @@ namespace RMAP_tolmach
             this.textBox_headerCRC.Name = "textBox_headerCRC";
             this.textBox_headerCRC.Size = new System.Drawing.Size(73, 23);
             this.textBox_headerCRC.TabIndex = 28;
-            this.textBox_headerCRC.Text = "0x00";
+            this.textBox_headerCRC.Text = "0x70";
             // 
             // label_HeaderCrc
             // 
@@ -527,9 +527,9 @@ namespace RMAP_tolmach
             this.groupBox_Instruction.Controls.Add(this.groupBox_packetType);
             this.groupBox_Instruction.Controls.Add(this.groupBox_commandCodes);
             this.groupBox_Instruction.Controls.Add(this.groupBox_replyLength);
-            this.groupBox_Instruction.Location = new System.Drawing.Point(268, 125);
+            this.groupBox_Instruction.Location = new System.Drawing.Point(300, 125);
             this.groupBox_Instruction.Name = "groupBox_Instruction";
-            this.groupBox_Instruction.Size = new System.Drawing.Size(447, 124);
+            this.groupBox_Instruction.Size = new System.Drawing.Size(415, 124);
             this.groupBox_Instruction.TabIndex = 44;
             this.groupBox_Instruction.TabStop = false;
             this.groupBox_Instruction.Text = "Instruction";
@@ -540,7 +540,7 @@ namespace RMAP_tolmach
             this.textBox_Instruction.Name = "textBox_Instruction";
             this.textBox_Instruction.Size = new System.Drawing.Size(73, 23);
             this.textBox_Instruction.TabIndex = 11;
-            this.textBox_Instruction.Text = "0x4d";
+            this.textBox_Instruction.Text = "0x6d";
             this.textBox_Instruction.TextChanged += new System.EventHandler(this.TextBoxInstruction_Chenged);
             // 
             // groupBox_packetType
@@ -580,10 +580,10 @@ namespace RMAP_tolmach
             // 
             // groupBox_commandCodes
             // 
-            this.groupBox_commandCodes.Controls.Add(this.checkBox_commandCode_incAddress);
-            this.groupBox_commandCodes.Controls.Add(this.checkBox_commandCode_reply);
-            this.groupBox_commandCodes.Controls.Add(this.checkBox_commandCode_verify);
-            this.groupBox_commandCodes.Controls.Add(this.checkBox_commandCode_rw);
+            this.groupBox_commandCodes.Controls.Add(this.checkBox_commandCodeIncrement);
+            this.groupBox_commandCodes.Controls.Add(this.checkBox_commandCodeReply);
+            this.groupBox_commandCodes.Controls.Add(this.checkBox_commandCodeVerify);
+            this.groupBox_commandCodes.Controls.Add(this.checkBox_commandCodeWrite);
             this.groupBox_commandCodes.Controls.Add(this.label8);
             this.groupBox_commandCodes.Controls.Add(this.label5);
             this.groupBox_commandCodes.Controls.Add(this.label6);
@@ -595,51 +595,51 @@ namespace RMAP_tolmach
             this.groupBox_commandCodes.TabStop = false;
             this.groupBox_commandCodes.Text = "Код команды";
             // 
-            // checkBox_commandCode_incAddress
+            // checkBox_commandCodeIncrement
             // 
-            this.checkBox_commandCode_incAddress.AutoSize = true;
-            this.checkBox_commandCode_incAddress.Checked = true;
-            this.checkBox_commandCode_incAddress.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_commandCode_incAddress.Location = new System.Drawing.Point(175, 84);
-            this.checkBox_commandCode_incAddress.Name = "checkBox_commandCode_incAddress";
-            this.checkBox_commandCode_incAddress.Size = new System.Drawing.Size(15, 14);
-            this.checkBox_commandCode_incAddress.TabIndex = 7;
-            this.checkBox_commandCode_incAddress.UseVisualStyleBackColor = true;
-            this.checkBox_commandCode_incAddress.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
+            this.checkBox_commandCodeIncrement.AutoSize = true;
+            this.checkBox_commandCodeIncrement.Checked = true;
+            this.checkBox_commandCodeIncrement.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_commandCodeIncrement.Location = new System.Drawing.Point(175, 84);
+            this.checkBox_commandCodeIncrement.Name = "checkBox_commandCodeIncrement";
+            this.checkBox_commandCodeIncrement.Size = new System.Drawing.Size(15, 14);
+            this.checkBox_commandCodeIncrement.TabIndex = 7;
+            this.checkBox_commandCodeIncrement.UseVisualStyleBackColor = true;
+            this.checkBox_commandCodeIncrement.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
             // 
-            // checkBox_commandCode_reply
+            // checkBox_commandCodeReply
             // 
-            this.checkBox_commandCode_reply.AutoSize = true;
-            this.checkBox_commandCode_reply.Checked = true;
-            this.checkBox_commandCode_reply.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_commandCode_reply.Location = new System.Drawing.Point(125, 84);
-            this.checkBox_commandCode_reply.Name = "checkBox_commandCode_reply";
-            this.checkBox_commandCode_reply.Size = new System.Drawing.Size(15, 14);
-            this.checkBox_commandCode_reply.TabIndex = 6;
-            this.checkBox_commandCode_reply.UseVisualStyleBackColor = true;
-            this.checkBox_commandCode_reply.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
+            this.checkBox_commandCodeReply.AutoSize = true;
+            this.checkBox_commandCodeReply.Checked = true;
+            this.checkBox_commandCodeReply.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_commandCodeReply.Location = new System.Drawing.Point(125, 84);
+            this.checkBox_commandCodeReply.Name = "checkBox_commandCodeReply";
+            this.checkBox_commandCodeReply.Size = new System.Drawing.Size(15, 14);
+            this.checkBox_commandCodeReply.TabIndex = 6;
+            this.checkBox_commandCodeReply.UseVisualStyleBackColor = true;
+            this.checkBox_commandCodeReply.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
             // 
-            // checkBox_commandCode_verify
+            // checkBox_commandCodeVerify
             // 
-            this.checkBox_commandCode_verify.AutoSize = true;
-            this.checkBox_commandCode_verify.Location = new System.Drawing.Point(75, 84);
-            this.checkBox_commandCode_verify.Name = "checkBox_commandCode_verify";
-            this.checkBox_commandCode_verify.Size = new System.Drawing.Size(15, 14);
-            this.checkBox_commandCode_verify.TabIndex = 5;
-            this.checkBox_commandCode_verify.UseVisualStyleBackColor = true;
-            this.checkBox_commandCode_verify.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
+            this.checkBox_commandCodeVerify.AutoSize = true;
+            this.checkBox_commandCodeVerify.Location = new System.Drawing.Point(75, 84);
+            this.checkBox_commandCodeVerify.Name = "checkBox_commandCodeVerify";
+            this.checkBox_commandCodeVerify.Size = new System.Drawing.Size(15, 14);
+            this.checkBox_commandCodeVerify.TabIndex = 5;
+            this.checkBox_commandCodeVerify.UseVisualStyleBackColor = true;
+            this.checkBox_commandCodeVerify.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
             // 
-            // checkBox_commandCode_rw
+            // checkBox_commandCodeWrite
             // 
-            this.checkBox_commandCode_rw.AutoSize = true;
-            this.checkBox_commandCode_rw.Checked = true;
-            this.checkBox_commandCode_rw.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_commandCode_rw.Location = new System.Drawing.Point(25, 84);
-            this.checkBox_commandCode_rw.Name = "checkBox_commandCode_rw";
-            this.checkBox_commandCode_rw.Size = new System.Drawing.Size(15, 14);
-            this.checkBox_commandCode_rw.TabIndex = 4;
-            this.checkBox_commandCode_rw.UseVisualStyleBackColor = true;
-            this.checkBox_commandCode_rw.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
+            this.checkBox_commandCodeWrite.AutoSize = true;
+            this.checkBox_commandCodeWrite.Checked = true;
+            this.checkBox_commandCodeWrite.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_commandCodeWrite.Location = new System.Drawing.Point(25, 84);
+            this.checkBox_commandCodeWrite.Name = "checkBox_commandCodeWrite";
+            this.checkBox_commandCodeWrite.Size = new System.Drawing.Size(15, 14);
+            this.checkBox_commandCodeWrite.TabIndex = 4;
+            this.checkBox_commandCodeWrite.UseVisualStyleBackColor = true;
+            this.checkBox_commandCodeWrite.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
             // 
             // label8
             // 
@@ -685,30 +685,30 @@ namespace RMAP_tolmach
             this.groupBox_replyLength.Controls.Add(this.radioButton_replyAddrLength_0);
             this.groupBox_replyLength.Location = new System.Drawing.Point(313, 10);
             this.groupBox_replyLength.Name = "groupBox_replyLength";
-            this.groupBox_replyLength.Size = new System.Drawing.Size(130, 109);
+            this.groupBox_replyLength.Size = new System.Drawing.Size(98, 109);
             this.groupBox_replyLength.TabIndex = 14;
             this.groupBox_replyLength.TabStop = false;
-            this.groupBox_replyLength.Text = "Длина reply-адреса";
+            this.groupBox_replyLength.Text = "Количество reply-адресов";
             // 
             // radioButton_replyAddrLength_12
             // 
             this.radioButton_replyAddrLength_12.AutoSize = true;
-            this.radioButton_replyAddrLength_12.Location = new System.Drawing.Point(25, 81);
+            this.radioButton_replyAddrLength_12.Location = new System.Drawing.Point(24, 87);
             this.radioButton_replyAddrLength_12.Name = "radioButton_replyAddrLength_12";
-            this.radioButton_replyAddrLength_12.Size = new System.Drawing.Size(65, 19);
+            this.radioButton_replyAddrLength_12.Size = new System.Drawing.Size(37, 19);
             this.radioButton_replyAddrLength_12.TabIndex = 3;
-            this.radioButton_replyAddrLength_12.Text = "12 байт";
+            this.radioButton_replyAddrLength_12.Text = "12";
             this.radioButton_replyAddrLength_12.UseVisualStyleBackColor = true;
             this.radioButton_replyAddrLength_12.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
             // 
             // radioButton_replyAddrLength_8
             // 
             this.radioButton_replyAddrLength_8.AutoSize = true;
-            this.radioButton_replyAddrLength_8.Location = new System.Drawing.Point(25, 61);
+            this.radioButton_replyAddrLength_8.Location = new System.Drawing.Point(24, 70);
             this.radioButton_replyAddrLength_8.Name = "radioButton_replyAddrLength_8";
-            this.radioButton_replyAddrLength_8.Size = new System.Drawing.Size(59, 19);
+            this.radioButton_replyAddrLength_8.Size = new System.Drawing.Size(31, 19);
             this.radioButton_replyAddrLength_8.TabIndex = 2;
-            this.radioButton_replyAddrLength_8.Text = "8 байт";
+            this.radioButton_replyAddrLength_8.Text = "8";
             this.radioButton_replyAddrLength_8.UseVisualStyleBackColor = true;
             this.radioButton_replyAddrLength_8.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
             // 
@@ -716,23 +716,23 @@ namespace RMAP_tolmach
             // 
             this.radioButton_replyAddrLength_4.AutoSize = true;
             this.radioButton_replyAddrLength_4.Checked = true;
-            this.radioButton_replyAddrLength_4.Location = new System.Drawing.Point(25, 41);
+            this.radioButton_replyAddrLength_4.Location = new System.Drawing.Point(24, 53);
             this.radioButton_replyAddrLength_4.Name = "radioButton_replyAddrLength_4";
-            this.radioButton_replyAddrLength_4.Size = new System.Drawing.Size(65, 19);
+            this.radioButton_replyAddrLength_4.Size = new System.Drawing.Size(31, 19);
             this.radioButton_replyAddrLength_4.TabIndex = 1;
             this.radioButton_replyAddrLength_4.TabStop = true;
-            this.radioButton_replyAddrLength_4.Text = "4 байта";
+            this.radioButton_replyAddrLength_4.Text = "4";
             this.radioButton_replyAddrLength_4.UseVisualStyleBackColor = true;
             this.radioButton_replyAddrLength_4.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
             // 
             // radioButton_replyAddrLength_0
             // 
             this.radioButton_replyAddrLength_0.AutoSize = true;
-            this.radioButton_replyAddrLength_0.Location = new System.Drawing.Point(25, 21);
+            this.radioButton_replyAddrLength_0.Location = new System.Drawing.Point(24, 36);
             this.radioButton_replyAddrLength_0.Name = "radioButton_replyAddrLength_0";
-            this.radioButton_replyAddrLength_0.Size = new System.Drawing.Size(59, 19);
+            this.radioButton_replyAddrLength_0.Size = new System.Drawing.Size(31, 19);
             this.radioButton_replyAddrLength_0.TabIndex = 0;
-            this.radioButton_replyAddrLength_0.Text = "0 байт";
+            this.radioButton_replyAddrLength_0.Text = "0";
             this.radioButton_replyAddrLength_0.UseVisualStyleBackColor = true;
             this.radioButton_replyAddrLength_0.CheckedChanged += new System.EventHandler(this.InstructionControls_Chenged);
             // 
@@ -891,10 +891,10 @@ namespace RMAP_tolmach
         private System.Windows.Forms.RadioButton radioButton_replyAddrLength_4;
         private System.Windows.Forms.RadioButton radioButton_replyAddrLength_0;
         private System.Windows.Forms.GroupBox groupBox_commandCodes;
-        private System.Windows.Forms.CheckBox checkBox_commandCode_incAddress;
-        private System.Windows.Forms.CheckBox checkBox_commandCode_reply;
-        private System.Windows.Forms.CheckBox checkBox_commandCode_verify;
-        private System.Windows.Forms.CheckBox checkBox_commandCode_rw;
+        private System.Windows.Forms.CheckBox checkBox_commandCodeIncrement;
+        private System.Windows.Forms.CheckBox checkBox_commandCodeReply;
+        private System.Windows.Forms.CheckBox checkBox_commandCodeVerify;
+        private System.Windows.Forms.CheckBox checkBox_commandCodeWrite;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;

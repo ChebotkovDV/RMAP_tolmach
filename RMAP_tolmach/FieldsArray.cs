@@ -46,7 +46,7 @@ namespace RMAP_tolmach
             Set(message);
         }
 
-        public string Status
+        public string GetReport
         {
             get
             {
@@ -56,11 +56,11 @@ namespace RMAP_tolmach
                 }
                 else if (Empty)
                 {
-                    return "поле <" + Name + ">    : пусто \r\n";
+                    return "поле <" + Name + ">    : пусто";
                 }
                 else
                 {
-                    return "поле <" + Name + ">    : ok \r\n";
+                    return "поле <" + Name + ">    : ok";
                 }
             }
         }
@@ -94,7 +94,7 @@ namespace RMAP_tolmach
                     if (newField.Fail)
                     {
                         Fail = true;
-                        Log += this[i].Status + "\r\n";
+                        Log += this[i].GetReport + "\r\n";
                     }
                 }
             }
