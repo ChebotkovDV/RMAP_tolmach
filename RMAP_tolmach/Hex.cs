@@ -96,7 +96,7 @@ namespace RMAP_tolmach
         // Определяет, заканчивается ли строка символом конца пакета
         // Возвращает символ конца пакета и строку без символа конца пакета
         //
-        public static bool endOfPacketIsCorrected(string message,out string endSymbols, out string cut)
+        public static bool EndOfPacketIsCorrected(string message,out string endSymbols, out string cut)
         {
             cut = message;
             message = message.Trim();
@@ -120,13 +120,14 @@ namespace RMAP_tolmach
         //
         // создает объект RmapPacket на основе HEX
         //
-        static public bool ParseToRmap(string message, Field targetLogicalAddresses, out RmapPacket newPacket, out string log)
+        static public bool ParseToRmap(string message, Field targetLogicalAddresses, Field initiatorLogicalAddress,
+            Field protocolIdentifier, out RmapPacket newPacket, out string log)
         {
             log = "";
             newPacket = new RmapPacket();
 
             // удаляем символ конца пакета
-            if (Hex.endOfPacketIsCorrected(message, out string endOfPacket, out message))
+            if (Hex.EndOfPacketIsCorrected(message, out string endOfPacket, out message))
             {
                 newPacket.EEP = (endOfPacket == "EEP");
             }
@@ -136,71 +137,119 @@ namespace RMAP_tolmach
                 return false;
             }
 
-            // переводим строку в массив Byte[], проверяем корректность
-            FieldsArray fields = new FieldsArray("", 1);
-            fields.Set(message);
-            if (fields.Fail)
+            // переводим строку в byte[], проверяем корректность
+            byte[] bytes = ParseToBytes(message, out log);
+            if (log != "")
             {
                 log = "Парсинг не возможен. Введите корректные данные";
                 return false;
             }
-            int targetLogicalAddressPointer = fields.LastIndexOf(targetLogicalAddresses);
-            if (targetLogicalAddressPointer == -1)
+            if (bytes.Length < 8)
             {
-                log = "Парсинг не возможен, т.к. targetLogicalAddress не найден в пакете. Задайте корректный targetLogicalAddress или измените содержание пакета";
+                log = "Парсинг не возможен. Введенная строка слишком коротка и/или не корректна.";
                 return false;
             }
-            byte[] bytes = fields.ToBytes();
 
-            // парсинг заголовка
-            try
+            // Поиск ключевых полей
+            int protocolIdentifierPointer = -1;
+            for (int i = bytes.Length - 2; i >= 0; i--)
             {
-                newPacket.ProtocolIdentifier.Set(bytes[targetLogicalAddressPointer - 1]);
-                newPacket.Instruction.Set(bytes[targetLogicalAddressPointer - 2]);
-                newPacket.Key.Set(bytes[targetLogicalAddressPointer - 3]);
+                if (bytes[i] != protocolIdentifier[0])
+                {
+                    continue;
+                }
+                if (bytes[i + 1] == targetLogicalAddresses[0] || bytes[i + 1] == initiatorLogicalAddress[0])
+                {
+                    protocolIdentifierPointer = i;
+                    break;
+                }
             }
-            catch (IndexOutOfRangeException)
+            if (protocolIdentifierPointer == -1)
             {
-                log = "не найдено одно из полей: ProtocolIdentifier, Instruction, Key. Возможно, введенный пакет слишком короток";
+                log = "Парсинг не возможен, т.к. не найдены ключевые поля (targetLogicalAddresses, initiatorLogicalAddress, protocolIdentifier).";
                 return false;
             }
-            Index spwAddressesStart = targetLogicalAddressPointer + 1;
-            Index spwAddressesEnd = fields.Length;
-            int initiatorLogicalAddresPointer = targetLogicalAddressPointer - 4 - newPacket.Instruction.AddressLength.ToInt();
-            Range replyAddressesRange = (initiatorLogicalAddresPointer + 1)..(targetLogicalAddressPointer - 3);
-            Range transactionIdentifierRange = (initiatorLogicalAddresPointer - 2)..initiatorLogicalAddresPointer;
-            Index extendedAddressPointer = initiatorLogicalAddresPointer - 3;
-            Range addressesRange = (initiatorLogicalAddresPointer - 7)..extendedAddressPointer;
-            Range dataLengthRange = (initiatorLogicalAddresPointer - 10)..(initiatorLogicalAddresPointer - 7);
-            int headerCrcPointer = (initiatorLogicalAddresPointer - 11);
-            try
+            if (protocolIdentifierPointer < 6)
             {
+                log = "Парсинг не возможен, т.к. не найдены некоторые поля заголовка. Возможно, введенный пакет слишком короток";
+                return false;
+            }
+            newPacket.ProtocolIdentifier.Set(bytes[protocolIdentifierPointer]);
+            newPacket.Instruction.Set(bytes[protocolIdentifierPointer - 1]);
+            if (protocolIdentifierPointer < bytes.Length - 2)
+            {
+                Range spwAddressRange = (protocolIdentifierPointer + 2)..;
+                newPacket.SpwAddresses.Set(bytes[spwAddressRange]);
+            }
+
+            int headerCrcPointer = 0;
+            if (newPacket.Instruction.IsCommand)
+            {
+                int targetLogicalAddressPointer = protocolIdentifierPointer + 1;
+                int initiatorLogicalAddresPointer = protocolIdentifierPointer - 3 - newPacket.Instruction.GetReplyAddressLength;
+                int keyPointer = protocolIdentifierPointer - 2;
+                int extendedAddressPointer = initiatorLogicalAddresPointer - 3;
+                headerCrcPointer = (initiatorLogicalAddresPointer - 11);
+                if (headerCrcPointer < 0)
+                {
+                    log = "Парсинг не возможен, т.к. заголовок RMAP-команды слишком короток:\r\n";
+                    log += "  ProtocolIdentifier = " + bytes[protocolIdentifierPointer].ToString("x2") + "  index=" + protocolIdentifierPointer.ToString() + "\r\n";
+                    log += "  Instruction = " + bytes[protocolIdentifierPointer - 1].ToString("x2") + "\r\n";
+                    log += "  Replay addresses count = " + newPacket.Instruction.GetReplyAddressLength.ToString() + "\r\n";
+                    log += "  InitiatorLogicalAddress index =" + initiatorLogicalAddresPointer.ToString() + "\r\n";
+                    log += "  HeaderCRC index =" + headerCrcPointer.ToString() + "\r\n";
+                    return false;
+                }
+                Range transactionIdentifierRange = (initiatorLogicalAddresPointer - 2)..initiatorLogicalAddresPointer;
+                Range replyAddressesRange = (initiatorLogicalAddresPointer + 1)..(targetLogicalAddressPointer - 3);
+                Range addressesRange = (initiatorLogicalAddresPointer - 7)..extendedAddressPointer;
+                newPacket.TargetLogicalAddresses.Set(bytes[targetLogicalAddressPointer]);
+                newPacket.Key.Set(bytes[keyPointer]);
                 newPacket.ReplyAddresses.Set(bytes[replyAddressesRange]);
                 newPacket.InitiatorLogicalAddress.Set(bytes[initiatorLogicalAddresPointer]);
                 newPacket.TransactionIdentifier.Set(bytes[transactionIdentifierRange]);
                 newPacket.ExtendedAddress.Set(bytes[extendedAddressPointer]);
                 newPacket.Address.Set(bytes[addressesRange]);
-                newPacket.DataLength.Set(bytes[dataLengthRange]);
                 newPacket.HeaderCRC.Set(bytes[headerCrcPointer]);
-                newPacket.SpwAddresses.Set(bytes[spwAddressesStart..spwAddressesEnd]);
             }
-            catch (IndexOutOfRangeException)
+            if (newPacket.Instruction.IsReply)
             {
-                log = "не найдено одно или несколько полей заголовка. Возможно, введенный пакет слишком короток";
-                return false;
-            }
+                int targetLogicalAddressPointer = protocolIdentifierPointer - 3;
+                int initiatorLogicalAddresPointer = protocolIdentifierPointer + 1;
+                int statusPointer = protocolIdentifierPointer - 2;
+                headerCrcPointer = newPacket.Instruction.DataExist ? (protocolIdentifierPointer - 10) : (protocolIdentifierPointer - 6);
 
-            // Парсинг поля данных
-            int dataLength = newPacket.DataLength.ToInt32();
-            int dataCrcPointer = 0;
-            int dataBytesCount = headerCrcPointer - 1;
-            if (dataBytesCount >= 0)
+                if (headerCrcPointer < 0)
+                {
+                    log = "Парсинг не возможен, т.к. заголовок RMAP-ответа слишком короток:\r\n";
+                    log += "  ProtocolIdentifier = " + bytes[protocolIdentifierPointer].ToString("x2") + "    index=" + protocolIdentifierPointer.ToString() + "\r\n";
+                    log += "  Instruction = " + bytes[protocolIdentifierPointer - 1].ToString("x2") + "\r\n";
+                    log += "  HeaderCRC index =" + headerCrcPointer.ToString() + "\r\n";
+                    return false;
+                }
+                Range transactionIdentifierRange = (targetLogicalAddressPointer - 2)..targetLogicalAddressPointer;
+                newPacket.Status.Set(bytes[statusPointer]);
+                newPacket.TargetLogicalAddresses.Set(bytes[targetLogicalAddressPointer]);
+                newPacket.InitiatorLogicalAddress.Set(bytes[initiatorLogicalAddresPointer]);
+                newPacket.TransactionIdentifier.Set(bytes[transactionIdentifierRange]);
+                newPacket.HeaderCRC.Set(bytes[headerCrcPointer]);
+            }
+            if (newPacket.Instruction.DataExist || newPacket.Instruction.IsCommand)
             {
-                Range dataRange = (dataCrcPointer + 1)..headerCrcPointer;
-                newPacket.Data.Set(bytes[dataRange]);
-                newPacket.DataCRC.Set(bytes[dataCrcPointer]);
+                Range dataLengthRange = (headerCrcPointer + 1)..(headerCrcPointer + 4);
+                newPacket.DataLength.Set(bytes[dataLengthRange]);
             }
-
+            if (newPacket.Instruction.DataExist)
+            {
+                if (headerCrcPointer > 0)
+                {
+                    newPacket.DataCRC.Set(bytes[0]);
+                }
+                if (headerCrcPointer > 1)
+                {
+                    newPacket.Data.Set(bytes[1..headerCrcPointer]);
+                }
+            }
             return true;
         }
         //
@@ -210,7 +259,7 @@ namespace RMAP_tolmach
         {
             string text = "";
             text += packet.SpwAddresses.ToString("", "", byteDivider);
-            if (packet.Instruction.PacketType.Command)
+            if (packet.Instruction.IsCommand)
             {
                 text += packet.TargetLogicalAddresses.ToString("", byteDivider);
                 text += packet.ProtocolIdentifier.ToString("", byteDivider);
@@ -221,9 +270,8 @@ namespace RMAP_tolmach
                 text += packet.TransactionIdentifier.ToString("", byteDivider);
                 text += packet.ExtendedAddress.ToString("", byteDivider);
                 text += packet.Address.ToString("", byteDivider);
-                text += packet.DataLength.ToString("", byteDivider);
             }
-            if (packet.Instruction.PacketType.Reply)
+            if (packet.Instruction.IsReply)
             {
                 text += packet.InitiatorLogicalAddress.ToString("", byteDivider);
                 text += packet.ProtocolIdentifier.ToString("", byteDivider);
@@ -231,15 +279,21 @@ namespace RMAP_tolmach
                 text += packet.Status.ToString("", byteDivider);
                 text += packet.TargetLogicalAddresses.ToString("", byteDivider);
                 text += packet.TransactionIdentifier.ToString("", byteDivider);
+                if (packet.Instruction.DataExist)
+                {
+                    text += byteDivider + "00";     // reserved field
+                }
+            }
+            if (packet.Instruction.DataExist || packet.Instruction.IsCommand)
+            {
+                text += packet.DataLength.ToString("", byteDivider);
             }
             text += packet.HeaderCRC.ToString("", byteDivider);
-
             if (packet.Instruction.DataExist)
             {
                 text += packet.Data.ToString("", "", byteDivider);
                 text += packet.DataCRC.ToString("", byteDivider);
             }
-
             if (packet.EEP)
             {
                 text += "  EEP";

@@ -125,7 +125,7 @@ namespace RMAP_tolmach
             return this.SequenceEqual(newField);
         }
 
-        public string Status
+        public string GetReport
         {
             get
             {
@@ -135,11 +135,11 @@ namespace RMAP_tolmach
                 }
                 else if (Empty)
                 {
-                    return "поле <" + Name + ">    : пусто \r\n";
+                    return "поле <" + Name + ">    : пусто";
                 }
                 else
                 {
-                    return "поле <" + Name + ">    : ok \r\n";
+                    return "поле <" + Name + ">    : ok";
                 }
             }
         }
